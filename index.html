@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>داشبورد پیشرفت دروس</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Limonad.js (timeline) -->
+    <script src="https://cdn.jsdelivr.net/npm/limonad@1.0.0/dist/limonad.min.js"></script>
+    <!-- Tippy.js -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f5f7fa;
+            padding: 2rem 0;
+        }
+        .site-header {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0 10px #0001;
+            margin: 0 auto 2rem auto;
+            max-width: 1200px;
+            padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .site-header .nav {
+            gap: 1.5rem;
+        }
+        .site-header .dropdown-toggle {
+            background: none;
+            border: none;
+            color: #444;
+            font-size: 1.2rem;
+        }
+        .site-header .dropdown-menu {
+            min-width: 140px;
+            text-align: right;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0 16px #0001;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+        }
+        .lesson-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: flex-start;
+            align-items: stretch;
+        }
+        .lesson-btn {
+            background: #e9e9ff;
+            border: none;
+            border-radius: 0.7rem;
+            padding: 0.8rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #3a3a6a;
+            box-shadow: 0 2px 8px #0001;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            min-width: 160px;
+            width: 100%;
+            height: 54px;
+            justify-content: center;
+        }
+        .lesson-btn.active, .lesson-btn:hover {
+            background: #ed12a3;
+            color: #fff;
+        }
+        .timeline-container {
+            margin: 2rem 0 2.5rem 0;
+        }
+        .timeline-horizontal {
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .timeline-dot {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #fff;
+            border: 4px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            position: relative;
+            transition: border 0.2s;
+            cursor: pointer;
+        }
+        .timeline-dot .fa {
+            font-size: 1.5rem;
+        }
+        .timeline-dot.green {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        .timeline-dot.blue {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        .timeline-dot.yellow {
+            border-color: #f1c40f;
+            color: #f1c40f;
+        }
+        .timeline-dot.red {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        .timeline-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #444;
+        }
+        .timeline-bar {
+            flex: 1;
+            height: 6px;
+            background: linear-gradient(90deg, #e0e0e0 60%, #ed12a3 100%);
+            margin: 0 0.2rem;
+            border-radius: 3px;
+            min-width: 30px;
+        }
+        .timeline-bar-vertical-custom {
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(180deg, #e0e0e0 60%, #ed12a3 100%);
+            margin: 0.2rem auto;
+            border-radius: 3px;
+        }
+        .timeline-vertical-custom {
+            display: none;
+        }
+        @media (max-width: 767px) {
+            .timeline-horizontal {
+                display: none;
+            }
+            .dashboard-container {
+                flex-direction: column;
+                gap: 0;
+                padding: 0.5rem 0.2rem;
+            }
+            aside#sidebarMenu {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            .lesson-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 1rem;
+                gap: 0.5rem;
+            }
+            .lesson-btn {
+                width: 140px;
+                min-width: 120px;
+                height: 48px;
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+            main {
+                width: 100%;
+            }
+            .timeline-vertical-custom {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin: 0 auto;
+            }
+        }
+        @media (min-width: 768px) {
+            .timeline-horizontal {
+                display: flex;
+            }
+            .timeline-vertical-custom {
+                display: none !important;
+            }
+        }
+        .progress {
+            height: 1.2rem;
+            border-radius: 0.7rem;
+        }
+        .progress-bar {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .score-green { color: #2ecc71; }
+        .score-blue { color: #3498db; }
+        .score-yellow { color: #f1c40f; }
+        .score-red { color: #e74c3c; }
+        .status-emoji {
+            font-size: 1.3rem;
+            margin-left: 0.3rem;
+        }
+        .chart-container {
+            margin: 2.5rem 0 1.5rem 0;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0 10px #0001;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="d-flex align-items-center gap-2">
+            <img src="./nehzat.png" alt="لوگو سایت" style="height:48px;width:auto;border-radius:0.5rem;box-shadow:0 2px 8px #0001;">
+            <span class="fw-bold fs-5">نهضت</span>
+        </div>
+        <nav class="nav">
+            <a class="nav-link" href="#"><i class="fa fa-home"></i> خانه</a>
+            <a class="nav-link" href="#"><i class="fa fa-chart-line"></i> گزارش کلی</a>
+            <a class="nav-link" href="#"><i class="fa fa-book"></i> منابع</a>
+        </nav>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-user-circle"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> پروفایل</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa fa-cog"></i> تنظیمات</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt"></i> خروج</a></li>
+            </ul>
+                </div>
+    </header>
+    <div class="dashboard-container row flex-nowrap">
+        <aside class="col-12 col-md-3" id="sidebarMenu">
+            <div class="lesson-menu flex-md-column" id="lessonMenu"></div>
+        </aside>
+        <main class="col-12 col-md-9">
+            <h2 class="text-center mb-4">داشبورد پیشرفت دروس</h2>
+            <div id="lessonInfo"></div>
+            <div class="timeline-container" id="timelineContainer"></div>
+            <div class="chart-container">
+                <div id="progressChart"></div>
+            </div>
+        </main>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">جزئیات مرحله</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- جزئیات مرحله اینجا قرار می‌گیرد -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+// داده‌های نمونه دروس و مراحل
+const lessons = [
+  {
+    id: 'quran',
+    name: 'قرآن',
+    icon: 'fa-quran',
+    image: 'quran_yung.png',
+    description: 'حفظ و تلاوت سوره‌های مختلف قرآن کریم به همراه ارزیابی ماهانه و بازخورد معلم.',
+    timeline: [
+      {
+        surah: 'الفاتحه',
+        ayat: '۱ تا ۷',
+        score: 19.5,
+        score_qualitative: 'ممتاز',
+        teacher: 'آقای رضایی',
+        feedback: 'شروع عالی! تسلط و تلفظ بسیار خوب.',
+        progress: 100,
+        details: [
+          { date: '۱۴۰۲/۷/۱', from: 1, to: 3 },
+          { date: '۱۴۰۲/۷/۲', from: 4, to: 7 }
+        ]
+      },
+      {
+        surah: 'البقره (۱ تا ۲۰)',
+        ayat: '۱ تا ۲۰',
+        score: 17.8,
+        score_qualitative: 'عالی',
+        teacher: 'آقای رضایی',
+        feedback: 'حفظ خوب اما نیاز به مرور بیشتر.',
+        progress: 100,
+        details: [
+          { date: '۱۴۰۲/۷/۵', from: 1, to: 10 },
+          { date: '۱۴۰۲/۷/۷', from: 11, to: 20 }
+        ]
+      },
+      {
+        surah: 'آل‌عمران (۱ تا ۳۰)',
+        ayat: '۱ تا ۳۰',
+        score: 15.2,
+        score_qualitative: 'خوب',
+        teacher: 'آقای رضایی',
+        feedback: 'برخی آیات نیاز به تکرار دارند.',
+        progress: 90,
+        details: [
+          { date: '۱۴۰۲/۸/۱', from: 1, to: 15 },
+          { date: '۱۴۰۲/۸/۳', from: 16, to: 30 }
+        ]
+      },
+      {
+        surah: 'النساء (۱ تا ۲۰)',
+        ayat: '۱ تا ۲۰',
+        score: 12.5,
+        score_qualitative: 'متوسط',
+        teacher: 'آقای رضایی',
+        feedback: 'نیاز به تلاش بیشتر و تمرین.',
+        progress: 60,
+        details: [
+          { date: '۱۴۰۲/۹/۱', from: 1, to: 10 },
+          { date: '۱۴۰۲/۹/۴', from: 11, to: 20 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'arabi',
+    name: 'عربی',
+    icon: 'fa-language',
+    image: 'irabic.jpg',
+    description: 'یادگیری قواعد و ترجمه متون عربی، تمرین ترجمه و درک مطلب.',
+    timeline: [
+      {
+        surah: 'درس ۱',
+        ayat: 'صفحه ۱ تا ۵',
+        score: 18.2,
+        score_qualitative: 'ممتاز',
+        teacher: 'خانم موسوی',
+        feedback: 'درک مطلب عالی و ترجمه روان.',
+        progress: 100,
+        details: [
+          { date: '۱۴۰۲/۷/۳', from: 1, to: 3 },
+          { date: '۱۴۰۲/۷/۵', from: 4, to: 5 }
+        ]
+      },
+      {
+        surah: 'درس ۲',
+        ayat: 'صفحه ۶ تا ۱۰',
+        score: 16.7,
+        score_qualitative: 'عالی',
+        teacher: 'خانم موسوی',
+        feedback: 'نیاز به تمرین بیشتر در قواعد.',
+        progress: 90,
+        details: [
+          { date: '۱۴۰۲/۷/۱۰', from: 6, to: 8 },
+          { date: '۱۴۰۲/۷/۱۲', from: 9, to: 10 }
+        ]
+      },
+      {
+        surah: 'درس ۳',
+        ayat: 'صفحه ۱۱ تا ۱۵',
+        score: 14.1,
+        score_qualitative: 'خوب',
+        teacher: 'خانم موسوی',
+        feedback: 'مرور قواعد فراموش نشود.',
+        progress: 80,
+        details: [
+          { date: '۱۴۰۲/۸/۱', from: 11, to: 13 },
+          { date: '۱۴۰۲/۸/۳', from: 14, to: 15 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'adabiat',
+    name: 'ادبیات',
+    icon: 'fa-book-open',
+    image: 'ferdossi.jpg',
+    description: 'مطالعه و تحلیل متون ادبی فارسی، شعر و نثر و یادگیری آرایه‌های ادبی.',
+    timeline: [
+      {
+        surah: 'درس ۱',
+        ayat: 'صفحه ۱ تا ۴',
+        score: 17.5,
+        score_qualitative: 'عالی',
+        teacher: 'آقای احمدی',
+        feedback: 'تحلیل شعر عالی انجام شده.',
+        progress: 100,
+        details: [
+          { date: '۱۴۰۲/۷/۲', from: 1, to: 2 },
+          { date: '۱۴۰۲/۷/۴', from: 3, to: 4 }
+        ]
+      },
+      {
+        surah: 'درس ۲',
+        ayat: 'صفحه ۵ تا ۸',
+        score: 15.9,
+        score_qualitative: 'خوب',
+        teacher: 'آقای احمدی',
+        feedback: 'آرایه‌ها نیاز به تمرین بیشتر دارد.',
+        progress: 85,
+        details: [
+          { date: '۱۴۰۲/۷/۸', from: 5, to: 6 },
+          { date: '۱۴۰۲/۷/۱۰', from: 7, to: 8 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'teb',
+    name: 'طب',
+    icon: 'fa-heart-pulse',
+    image: 'doctor.jpeg',
+    description: 'آشنایی با مبانی طب سنتی و نوین، یادگیری مفاهیم سلامت و بهداشت.',
+    timeline: [
+      {
+        surah: 'مبحث ۱',
+        ayat: 'صفحه ۱ تا ۳',
+        score: 18.8,
+        score_qualitative: 'ممتاز',
+        teacher: 'دکتر نادری',
+        feedback: 'مفاهیم به خوبی درک شده.',
+        progress: 100,
+        details: [
+          { date: '۱۴۰۲/۷/۱', from: 1, to: 3 }
+        ]
+      },
+      {
+        surah: 'مبحث ۲',
+        ayat: 'صفحه ۴ تا ۶',
+        score: 13.2,
+        score_qualitative: 'متوسط',
+        teacher: 'دکتر نادری',
+        feedback: 'نیاز به مرور بیشتر.',
+        progress: 70,
+        details: [
+          { date: '۱۴۰۲/۷/۵', from: 4, to: 6 }
+        ]
+      }
+    ]
+  }
+];
+
+// وضعیت و رنگ نمره کیفی
+function getQualitativeStatus(qual) {
+  switch (qual) {
+    case 'ممتاز': return { color: 'green', emoji: '🟢' };
+    case 'عالی': return { color: 'blue', emoji: '🔵' };
+    case 'خوب': return { color: 'yellow', emoji: '🟡' };
+    case 'متوسط': return { color: 'orange', emoji: '🟠' };
+    case 'سعی بیشتر': return { color: 'red', emoji: '🔴' };
+    default: return { color: 'gray', emoji: '⚪' };
+  }
+}
+// وضعیت و رنگ نمره کمی (برای نمودار کمی)
+function getScoreStatus(score) {
+  if (score >= 18) return { color: 'green', emoji: '🟢', status: 'قبول شده است' };
+  if (score >= 16) return { color: 'blue', emoji: '🔵', status: 'قبول شده است' };
+  if (score >= 13) return { color: 'yellow', emoji: '🟡', status: 'قبول شده است' };
+  return { color: 'red', emoji: '🔴', status: 'مردود' };
+}
+// منوی دروس
+function renderLessonMenu(selectedId) {
+  const menu = document.getElementById('lessonMenu');
+  menu.innerHTML = '';
+  // دکمه همه دروس
+  const allBtn = document.createElement('button');
+  allBtn.className = 'lesson-btn' + (!selectedId ? ' active' : '');
+  allBtn.innerHTML = `<i class="fa fa-layer-group"></i> همه دروس`;
+  allBtn.onclick = () => {
+    renderLessonMenu(null);
+    renderLessonInfo(null);
+    renderTimeline(null);
+    renderChart(null);
+  };
+  menu.appendChild(allBtn);
+  lessons.forEach(lesson => {
+                const btn = document.createElement('button');
+    btn.className = 'lesson-btn' + (lesson.id === selectedId ? ' active' : '');
+    btn.innerHTML = `<i class="fa ${lesson.icon}"></i> ${lesson.name}`;
+    btn.onclick = () => {
+      renderLessonMenu(lesson.id);
+      renderLessonInfo(lesson);
+      renderTimeline(lesson);
+      renderChart(lesson);
+    };
+    menu.appendChild(btn);
+  });
+}
+// اطلاعات کلی درس یا همه دروس
+function renderLessonInfo(lesson) {
+  const info = document.getElementById('lessonInfo');
+  if (!lesson) {
+    info.innerHTML = `<div class="mb-3 text-center"><strong>عملکرد کلی همه دروس در نمودار زیر قابل مشاهده است.</strong></div>`;
+    return;
+  }
+  info.innerHTML = `
+    <div class="mb-3 text-center">
+      <img src="./${lesson.image}" alt="${lesson.name}" style="max-width:160px;max-height:110px;border-radius:1rem;box-shadow:0 2px 8px #0002;margin-bottom:1rem;">
+          </div>
+    <div class="mb-3"><strong>درباره درس:</strong> ${lesson.description}</div>
+  `;
+}
+// تایم‌لاین فقط برای درس انتخابی
+function renderTimeline(lesson) {
+  const container = document.getElementById('timelineContainer');
+  container.innerHTML = '';
+  if (!lesson) return;
+  // افقی
+  const horiz = document.createElement('div');
+  horiz.className = 'timeline-horizontal';
+  lesson.timeline.forEach((item, idx) => {
+    if (idx > 0) {
+      const bar = document.createElement('div');
+      bar.className = 'timeline-bar';
+      horiz.appendChild(bar);
+    }
+    const qual = getQualitativeStatus(item.score_qualitative);
+    // نقطه و لیبل زیر آن
+    const dotLabelWrap = document.createElement('div');
+    dotLabelWrap.style.display = 'flex';
+    dotLabelWrap.style.flexDirection = 'column';
+    dotLabelWrap.style.alignItems = 'center';
+    dotLabelWrap.style.minWidth = '60px';
+    const dot = document.createElement('div');
+    dot.className = `timeline-dot ${qual.color}`;
+    dot.setAttribute('data-tippy-content', `بازخورد: <b class='score-${qual.color}'>${item.score_qualitative}</b>`);
+    dot.innerHTML = `<i class=\"fa ${lesson.icon}\"></i>`;
+    dot.onclick = () => showDetailModal(lesson, item);
+    const label = document.createElement('div');
+    label.className = 'timeline-label';
+    label.innerText = item.surah;
+    dotLabelWrap.appendChild(dot);
+    dotLabelWrap.appendChild(label);
+    horiz.appendChild(dotLabelWrap);
+  });
+  container.appendChild(horiz);
+  // عمودی (موبایل) - ساختار مستقل و وسط‌چین
+  const vert = document.createElement('div');
+  vert.className = 'timeline-vertical-custom';
+  vert.style.display = 'flex';
+  vert.style.flexDirection = 'column';
+  vert.style.alignItems = 'center';
+  vert.style.width = '100%';
+  lesson.timeline.forEach((item, idx) => {
+    // نقطه و لیبل زیر آن
+    const dotLabelWrap = document.createElement('div');
+    dotLabelWrap.style.display = 'flex';
+    dotLabelWrap.style.flexDirection = 'column';
+    dotLabelWrap.style.alignItems = 'center';
+    dotLabelWrap.style.justifyContent = 'center';
+    dotLabelWrap.style.width = '70px';
+    dotLabelWrap.style.margin = '0 auto';
+    const qual = getQualitativeStatus(item.score_qualitative);
+    const dot = document.createElement('div');
+    dot.className = `timeline-dot ${qual.color}`;
+    dot.setAttribute('data-tippy-content', `بازخورد: <b class='score-${qual.color}'>${item.score_qualitative}</b>`);
+    dot.innerHTML = `<i class=\"fa ${lesson.icon}\"></i>`;
+    dot.onclick = () => showDetailModal(lesson, item);
+    const label = document.createElement('div');
+    label.className = 'timeline-label';
+    label.innerText = item.surah;
+    dotLabelWrap.appendChild(dot);
+    dotLabelWrap.appendChild(label);
+    vert.appendChild(dotLabelWrap);
+    if (idx < lesson.timeline.length - 1) {
+      const bar = document.createElement('div');
+      bar.className = 'timeline-bar-vertical-custom';
+      bar.style.width = '6px';
+      bar.style.height = '40px';
+      bar.style.background = 'linear-gradient(180deg, #e0e0e0 60%, #ed12a3 100%)';
+      bar.style.margin = '0.2rem auto';
+      bar.style.borderRadius = '3px';
+      vert.appendChild(bar);
+    }
+  });
+  container.appendChild(vert);
+  // فعال‌سازی tooltip
+  setTimeout(() => {
+    tippy('.timeline-dot', { allowHTML: true, placement: 'top', theme: 'light-border' });
+  }, 100);
+}
+// مدال جزئیات
+function showDetailModal(lesson, item) {
+  // معدل کمی و کیفی درس
+  const avgScore = lesson.timeline.reduce((a, b) => a + b.score, 0) / lesson.timeline.length;
+  const avgQual = lesson.timeline.map(x => x.score_qualitative);
+  // بیشترین تکرار کیفی
+  const qualCount = {};
+  avgQual.forEach(q => qualCount[q] = (qualCount[q] || 0) + 1);
+  const avgQualitative = Object.entries(qualCount).sort((a, b) => b[1] - a[1])[0][0];
+  const status = getScoreStatus(item.score);
+  const qual = getQualitativeStatus(item.score_qualitative);
+  const modalBody = document.getElementById('modalBody');
+  modalBody.innerHTML = `
+    <h5><i class="fa ${lesson.icon}"></i> ${item.surah}</h5>
+    <p>آیات: ${item.ayat}</p>
+    <p>نام دبیر: <b>${item.teacher}</b></p>
+    <p>معدل کمی درس: <span class="score-${status.color}">${avgScore.toFixed(1)}</span></p>
+    <p>معدل کیفی درس: <span class="score-${qual.color}">${avgQualitative}</span></p>
+    <p>نمره این بخش: <span class="score-${status.color}">${item.score}</span> <span class="status-emoji">${status.emoji}</span></p>
+    <p>بازخورد کیفی این بخش: <span class="score-${qual.color}">${item.score_qualitative}</span> <span class="status-emoji">${qual.emoji}</span></p>
+    <div class="progress mb-3">
+      <div class="progress-bar bg-${status.color}" role="progressbar" style="width: ${item.progress}%" aria-valuenow="${item.progress}" aria-valuemin="0" aria-valuemax="100">${item.progress}%</div>
+    </div>
+    <div class="alert alert-info"><b>بازخورد معلم:</b> ${item.feedback}</div>
+    <h6 class="mt-3">مراحل حفظ/مطالعه:</h6>
+    <ul>
+      ${item.details.map(d => `<li>${d.date} — از آیه ${d.from} تا ${d.to}</li>`).join('')}
+    </ul>
+  `;
+  const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+  modal.show();
+}
+// نمودار خطی پیشرفت
+function renderChart(lesson) {
+  if (!lesson) {
+    // نمودار کلی همه دروس (کیفی)
+    const categories = lessons[0].timeline.map(item => item.surah);
+    const series = lessons.map(lesson => {
+      return {
+        name: lesson.name,
+        data: lesson.timeline.map(item => {
+          // کیفی به عدد برای نمودار
+          switch (item.score_qualitative) {
+            case 'ممتاز': return 5;
+            case 'عالی': return 4;
+            case 'خوب': return 3;
+            case 'متوسط': return 2;
+            case 'سعی بیشتر': return 1;
+            default: return 0;
+          }
+        }),
+        color: undefined
+      };
+    });
+    Highcharts.chart('progressChart', {
+      chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
+      title: { text: 'مقایسه عملکرد کیفی همه دروس' },
+      xAxis: {
+        categories,
+        title: { text: 'مراحل' },
+        labels: {
+          formatter: function() { return this.value; }
+        }
+            },
+            yAxis: {
+        min: 1,
+        max: 5,
+        tickInterval: 1,
+        title: { text: 'بازخورد کیفی' },
+        labels: {
+          formatter: function() {
+            return ['','سعی بیشتر','متوسط','خوب','عالی','ممتاز'][this.value];
+          }
+        }
+            },
+            tooltip: {
+        formatter: function() {
+          return `<b>${this.series.name}</b><br>مرحله: ${this.x}<br>بازخورد: <b>${['','سعی بیشتر','متوسط','خوب','عالی','ممتاز'][this.y]}</b>`;
+        },
+        useHTML: true
+      },
+      series,
+      credits: { enabled: false }
+    });
+    return;
+  }
+  // نمودار کمی درس انتخابی
+  const categories = lesson.timeline.map(item => item.surah);
+  const scores = lesson.timeline.map(item => item.score);
+  Highcharts.chart('progressChart', {
+    chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
+    title: { text: 'روند پیشرفت نمرات' },
+    xAxis: { categories, title: { text: 'مراحل' } },
+    yAxis: { min: 0, max: 20, tickInterval: 2, title: { text: 'نمره' } },
+    tooltip: { valueSuffix: ' نمره' },
+    series: [{ name: 'نمره', data: scores, color: '#ed12a3', marker: { enabled: true, radius: 5 } }],
+            credits: { enabled: false }
+        });
+}
+// مقداردهی اولیه
+renderLessonMenu(null);
+renderLessonInfo(null);
+renderTimeline(null);
+renderChart(null);
+    </script>
+</body>
+</html>

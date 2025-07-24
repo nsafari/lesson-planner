@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ورود | نهضت</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            font-family: 'Vazirmatn', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 0 16px #0002;
+            padding: 2.5rem 2rem 2rem 2rem;
+            max-width: 370px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .login-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-logo img {
+            width: 70%;
+            height: 70px;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        .login-logo span {
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-top: 0.5rem;
+            color: #ed12a3;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 0.7rem;
+            font-size: 1.05rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            border-radius: 0.7rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: #ed12a3;
+            color: #fff;
+            margin-top: 1.2rem;
+        }
+
+        .login-btn:active {
+            background: #c00b7e;
+        }
+
+        .forgot-link {
+            color: #ed12a3;
+            font-size: 0.98rem;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
+        .quran-gif {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1s;
+            height: 180px;
+        }
+
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+                max-width: 98vw;
+            }
+
+            .quran-gif img {
+                width: 90vw;
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="./nehzat.png" alt="لوگو سایت">
+            <span>نهضت</span>
+        </div>
+        <form id="loginForm" autocomplete="off">
+            <div class="mb-3">
+                <label for="username" class="form-label">نام کاربری</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">رمز عبور</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="code" class="form-label">کد ورود</label>
+                <input type="text" class="form-control" id="code" name="code" required>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="#" class="forgot-link">فراموشی رمز عبور؟</a>
+            </div>
+            <button type="submit" class="btn login-btn">ورود</button>
+        </form>
+        <div class="quran-gif" id="quranGifContainer" style="display:none;">
+            <img id="quranGif" src="./quran-light 00_00_00-00_00_30.gif" alt="قرآن"
+                style="max-width:220px;max-height:180px;">
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script>
+        const form = document.getElementById('loginForm');
+        const gifContainer = document.getElementById('quranGifContainer');
+        const gif = document.getElementById('quranGif');
+
+        $("#loginForm").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 3
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                code: {
+                    required: true,
+                    digits: true,
+                    minlength: 4,
+                    maxlength: 6
+                }
+            },
+            messages: {
+                username: {
+                    required: "لطفاً نام کاربری را وارد کنید",
+                    minlength: "نام کاربری باید حداقل ۳ کاراکتر باشد"
+                },
+                password: {
+                    required: "لطفاً رمز عبور را وارد کنید",
+                    minlength: "رمز عبور باید حداقل ۶ کاراکتر باشد"
+                },
+                code: {
+                    required: "لطفاً کد ورود را وارد کنید",
+                    digits: "کد باید فقط عدد باشد",
+                    minlength: "کد حداقل باید ۴ رقم باشد",
+                    maxlength: "کد حداکثر باید ۶ رقم باشد"
+                }
+            },
+            errorClass: "is-invalid",
+            validClass: "is-valid",
+            errorElement: "div",
+            highlight: function (element) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid").addClass("is-valid");
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("invalid-feedback");
+                error.insertAfter(element);
+            },
+            submitHandler: function (form1) {
+                console.log(form1);
+                
+                form.style.transition = 'opacity 1s';
+                form.style.opacity = 0;
+                setTimeout(() => {
+                    form.style.display = 'none';
+                    gifContainer.style.display = 'flex';
+                    setTimeout(() => {
+                        gifContainer.style.opacity = 1;
+                        // ریست گیف برای شروع مجدد
+                        gif.src = gif.src;
+                    }, 50);
+                }, 1000);
+
+                return false;
+            }
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+        });
+    </script>
+</body>
+
+</html>
