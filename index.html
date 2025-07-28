@@ -106,7 +106,8 @@
     }
 
     .timeline-horizontal {
-      display: flex;
+      /* display: flex; */
+      display: none;
       align-items: center;
       overflow-x: auto;
       padding-bottom: 1rem;
@@ -219,7 +220,8 @@
       }
 
       .timeline-vertical-custom {
-        display: flex !important;
+        /* display: flex !important; */
+        display: none;
         flex-direction: column;
         align-items: center;
         width: 100%;
@@ -316,6 +318,7 @@
       <div class="chart-container">
         <div id="progressChart"></div>
       </div>
+      <iframe style="width: 100%;height: 400px;" src="./sound.html" frameborder="0"></iframe>
     </main>
   </div>
   <!-- Modal -->
@@ -353,8 +356,8 @@
             feedback: 'شروع عالی! تسلط و تلفظ بسیار خوب.',
             progress: 100,
             details: [
-              { date: '۱۴۰۲/۷/۱', from: 1, to: 3, surah: "الفاتحه", score: "19" },
-              { date: '۱۴۰۲/۷/۲', from: 4, to: 7, surah: "الفاتحه", score: "15" }
+              { date: '۱۴۰۲/۷/۱', from: 1, to: 3, surah: "الفاتحه", score: "19", type: "حفظ" },
+              { date: '۱۴۰۲/۷/۲', from: 4, to: 7, surah: "الفاتحه", score: "15", type: "حفظ" }
             ]
           },
           {
@@ -366,8 +369,8 @@
             feedback: 'حفظ خوب اما نیاز به مرور بیشتر.',
             progress: 100,
             details: [
-              { date: '۱۴۰۲/۷/۵', from: 1, to: 10, surah: "بقره", score: "17" },
-              { date: '۱۴۰۲/۷/۷', from: 11, to: 20, surah: "بقره", score: "17" }
+              { date: '۱۴۰۲/۷/۵', from: 1, to: 10, surah: "بقره", score: "17", type: "حفظ" },
+              { date: '۱۴۰۲/۷/۷', from: 11, to: 20, surah: "بقره", score: "17", type: "حفظ" }
             ]
           },
           {
@@ -630,7 +633,7 @@
       // عمودی (موبایل) - ساختار مستقل و وسط‌چین
       const vert = document.createElement('div');
       vert.className = 'timeline-vertical-custom';
-      vert.style.display = 'flex';
+      //vert.style.display = 'flex';
       vert.style.flexDirection = 'column';
       vert.style.alignItems = 'center';
       vert.style.width = '100%';
@@ -702,6 +705,7 @@
         <li>
           <br />
           <ul>
+            <li>نوع: ${d.type}</li>
             <li>سوره: ${d.surah}</li>
             <li>${d.date} — از آیه ${d.from} تا ${d.to}</li>  
             <li>نمره: <span style="color:${getScoreStatus(d.score).color}">${d.score}</span></li>
@@ -763,7 +767,8 @@
             useHTML: true
           },
           series,
-          credits: { enabled: false }
+          credits: { enabled: false },
+
         });
         return;
       }
@@ -774,7 +779,43 @@
         chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
         title: { text: 'روند پیشرفت نمرات' },
         xAxis: { categories, title: { text: 'مراحل' } },
-        yAxis: { min: 0, max: 20, tickInterval: 2, title: { text: 'نمره' } },
+        yAxis: {
+          min: 0,
+          max: 20,
+          tickInterval: 2,
+          title: { text: 'نمره' },
+          plotBands: [
+            {
+              from: 0,
+              to: 12,
+              color: 'rgba(255, 0, 0, 0.2)',
+              label: {
+                text: 'مردود',
+                style: { color: 'red' }
+              }
+            },
+            {
+              from: 12,
+              to: 20,
+              color: 'rgba(0, 255, 0, 0.2)',
+              label: {
+                text: 'قابل قبول',
+                style: { color: 'green' }
+              }
+            }
+          ],
+          plotLines: [{
+            value: 12,
+            color: 'red',
+            width: 2,
+            dashStyle: 'Dash',
+            label: {
+              text: 'آستانه',
+              align: 'right',
+              style: { color: 'red' }
+            }
+          }]
+        },
         tooltip: { valueSuffix: ' نمره' },
         series: [{ name: 'نمره', data: scores, color: '#ed12a3', marker: { enabled: true, radius: 5 } }],
         credits: { enabled: false }
