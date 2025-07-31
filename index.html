@@ -10,7 +10,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <!-- Limonad.js (timeline) -->
-  <script src="https://cdn.jsdelivr.net/npm/limonad@1.0.0/dist/limonad.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lemonadejs/dist/lemonade.min.js"></script>
   <!-- Tippy.js -->
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
   <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -103,11 +103,11 @@
 
     .timeline-container {
       margin: 2rem 0 2.5rem 0;
+      display: none;
     }
 
     .timeline-horizontal {
-      /* display: flex; */
-      display: none;
+      display: flex;
       align-items: center;
       overflow-x: auto;
       padding-bottom: 1rem;
@@ -286,7 +286,6 @@
     <div class="d-flex align-items-center gap-2">
       <img src="./nehzat.png" alt="لوگو سایت"
         style="height:48px;width:auto;border-radius:0.5rem;box-shadow:0 2px 8px #0001;">
-      <span class="fw-bold fs-5">نهضت</span>
     </div>
     <nav class="nav">
       <a class="nav-link" href="#"><i class="fa fa-home"></i> خانه</a>
@@ -348,7 +347,7 @@
         description: 'حفظ و تلاوت سوره‌های مختلف قرآن کریم به همراه ارزیابی ماهانه و بازخورد معلم.',
         timeline: [
           {
-            surah: 'ترم اول',
+            surah: 'دو هفته اول',
             ayat: '۱ تا ۷',
             score: 19.5,
             score_qualitative: 'ممتاز',
@@ -361,7 +360,7 @@
             ]
           },
           {
-            surah: 'ترم دوم',
+            surah: 'دو هفته دوم',
             ayat: '۱ تا ۲۰',
             score: 17.8,
             score_qualitative: 'عالی',
@@ -374,7 +373,7 @@
             ]
           },
           {
-            surah: 'ترم سوم',
+            surah: 'دو هفته سوم',
             ayat: '۱ تا ۳۰',
             score: 15.2,
             score_qualitative: 'خوب',
@@ -387,7 +386,7 @@
             ]
           },
           {
-            surah: 'ترم چهارم',
+            surah: 'دو هفته چهارم',
             ayat: '۱ تا ۲۰',
             score: 12.5,
             score_qualitative: 'متوسط',
@@ -400,7 +399,7 @@
             ]
           },
           {
-            surah: 'ترم پنجم',
+            surah: 'دو هفته پنجم',
             ayat: '۱ تا ۲۰',
             score: null,
             teacher: 'آقای رضایی',
@@ -534,12 +533,24 @@
     // وضعیت و رنگ نمره کیفی
     function getQualitativeStatus(qual) {
       switch (qual) {
-        case 'ممتاز': return { color: 'green', emoji: '🟢' };
-        case 'عالی': return { color: 'blue', emoji: '🔵' };
-        case 'خوب': return { color: 'yellow', emoji: '🟡' };
-        case 'متوسط': return { color: 'orange', emoji: '🟠' };
-        case 'سعی بیشتر': return { color: 'red', emoji: '🔴' };
-        default: return { color: 'gray', emoji: '⚪' };
+        case 'ممتاز':
+          return { color: 'green', emoji: '🟢', score: 5 }
+          break;
+        case 'عالی':
+          return { color: 'blue', emoji: '🔵', score: 4 }
+          break;
+        case 'خوب':
+          return { color: 'yellow', emoji: '🟡', score: 3 }
+          break;
+        case 'متوسط':
+          return { color: 'orange', emoji: '🟠', score: 2 }
+          break;
+        case 'سعی بیشتر':
+          return { color: 'red', emoji: '🔴', score: 1 }
+          break;
+        default:
+          return { color: 'gray', emoji: '⚪', score: 0 }
+          break;
       }
     }
     // وضعیت و رنگ نمره کمی (برای نمودار کمی)
@@ -717,109 +728,121 @@
       const modal = new bootstrap.Modal(document.getElementById('detailModal'));
       modal.show();
     }
+
     // نمودار خطی پیشرفت
     function renderChart(lesson) {
-      if (!lesson) {
-        // نمودار کلی همه دروس (کیفی)
-        const categories = lessons[0].timeline.map(item => item.surah);
-        const series = lessons.map(lesson => {
-          return {
-            name: lesson.name,
-            data: lesson.timeline.map(item => {
-              // کیفی به عدد برای نمودار
-              switch (item.score_qualitative) {
-                case 'ممتاز': return 5;
-                case 'عالی': return 4;
-                case 'خوب': return 3;
-                case 'متوسط': return 2;
-                case 'سعی بیشتر': return 1;
-                default: return 0;
-              }
-            }),
-            color: undefined
-          };
-        });
-        Highcharts.chart('progressChart', {
-          chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
-          title: { text: 'مقایسه عملکرد کیفی همه دروس' },
-          xAxis: {
-            categories,
-            title: { text: 'مراحل' },
-            labels: {
-              formatter: function () { return this.value; }
-            }
-          },
-          yAxis: {
-            min: 1,
-            max: 5,
-            tickInterval: 1,
-            title: { text: 'بازخورد کیفی' },
-            labels: {
-              formatter: function () {
-                return ['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.value];
-              }
-            }
-          },
-          tooltip: {
-            formatter: function () {
-              return `<b>${this.series.name}</b><br>مرحله: ${this.x}<br>بازخورد: <b>${['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.y]}</b>`;
-            },
-            useHTML: true
-          },
-          series,
-          credits: { enabled: false },
+      document.querySelector("#progressChart").innerHTML = ""
+      // نمودار کلی همه دروس (کیفی)
+      const categories = lessons[0].timeline.map(item => item.surah);
 
-        });
-        return;
-      }
-      // نمودار کمی درس انتخابی
-      const categories = lesson.timeline.map(item => item.surah);
-      const scores = lesson.timeline.map(item => item.score);
+      const series = ([lesson?.timeline][0] ? [lesson.timeline] : lessons).map(lesson1 => {
+        return {
+          name: lesson?.name || lesson1.name,
+          data: lesson1.timeline ? lesson1.timeline.map(x => getQualitativeStatus(x.
+            score_qualitative).score) : lesson1.map(x => getQualitativeStatus(x.score_qualitative).score),
+          zones: [{
+            value: 3,
+            color: '#f15c80' // زیر آستانه = رنگ مردودی
+          }, {
+            color: '#7cb5ec' // بالای آستانه = رنگ اوکی
+          }]
+        };
+      });
       Highcharts.chart('progressChart', {
         chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
-        title: { text: 'روند پیشرفت نمرات' },
-        xAxis: { categories, title: { text: 'مراحل' } },
+        title: { text: 'مقایسه عملکرد کیفی همه دروس' },
+        xAxis: {
+          categories,
+          title: { text: 'مراحل' },
+          labels: {
+            formatter: function () { return this.value; }
+          }
+        },
         yAxis: {
-          min: 0,
-          max: 20,
-          tickInterval: 2,
-          title: { text: 'نمره' },
-          plotBands: [
-            {
-              from: 0,
-              to: 12,
-              color: 'rgba(255, 0, 0, 0.2)',
-              label: {
-                text: 'مردود',
-                style: { color: 'red' }
-              }
-            },
-            {
-              from: 12,
-              to: 20,
-              color: 'rgba(0, 255, 0, 0.2)',
-              label: {
-                text: 'قابل قبول',
-                style: { color: 'green' }
-              }
+          min: 1,
+          max: 5,
+          tickInterval: 1,
+          title: { text: 'بازخورد کیفی' },
+          labels: {
+            formatter: function () {
+              return ['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.value];
             }
-          ],
+          },
           plotLines: [{
-            value: 12,
+            value: 3, // مقدار خط آستانه
             color: 'red',
-            width: 2,
             dashStyle: 'Dash',
+            width: 2,
             label: {
-              text: 'آستانه',
+              text: 'حد مردودی',
               align: 'right',
-              style: { color: 'red' }
+              style: {
+                color: 'red',
+                fontWeight: 'bold'
+              }
             }
           }]
         },
-        tooltip: { valueSuffix: ' نمره' },
-        series: [{ name: 'نمره', data: scores, color: '#ed12a3', marker: { enabled: true, radius: 5 } }],
-        credits: { enabled: false }
+        tooltip: {
+          formatter: function () {
+            return `<b>${this.series.name}</b><br>مرحله: ${this.x}<br>بازخورد: <b>${['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.y]}</b>`;
+          },
+          useHTML: true
+        },
+        series,
+        credits: { enabled: false },
+
       });
+
+      // نمودار کمی درس انتخابی
+      // const categories = lesson.timeline.map(item => item.surah);
+      // const scores = lesson.timeline.map(item => item.score);
+      // Highcharts.chart('progressChart', {
+      //   chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
+      //   title: { text: 'روند پیشرفت نمرات' },
+      //   xAxis: { categories, title: { text: 'مراحل' } },
+      //   yAxis: {
+      //     min: 0,
+      //     max: 20,
+      //     tickInterval: 2,
+      //     title: { text: 'نمره' },
+      //     plotBands: [
+      //       {
+      //         from: 0,
+      //         to: 12,
+      //         color: 'rgba(255, 0, 0, 0.2)',
+      //         label: {
+      //           text: 'مردود',
+      //           style: { color: 'red' }
+      //         }
+      //       },
+      //       {
+      //         from: 12,
+      //         to: 20,
+      //         color: 'rgba(0, 255, 0, 0.2)',
+      //         label: {
+      //           text: 'قابل قبول',
+      //           style: { color: 'green' }
+      //         }
+      //       }
+      //     ],
+      //     plotLines: [{
+      //       value: 12,
+      //       color: 'red',
+      //       width: 2,
+      //       dashStyle: 'Dash',
+      //       label: {
+      //         text: 'آستانه',
+      //         align: 'right',
+      //         style: { color: 'red' }
+      //       }
+      //     }]
+      //   },
+      //   tooltip: { valueSuffix: ' نمره' },
+      //   series: [{ name: 'نمره', data: scores, color: '#ed12a3', marker: { enabled: true, radius: 5 } }],
+      //   credits: { enabled: false }
+      // });
+
     }
     // مقداردهی اولیه
     renderLessonMenu(null);
