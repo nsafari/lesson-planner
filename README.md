@@ -1,93 +1,121 @@
-# lesson-planner 
+# پنل مدیریت دانش آموزان
 
+این پروژه یک پنل مدیریت کامل برای مدیریت دانش آموزان است که با استفاده از تکنولوژی های مدرن وب توسعه یافته است.
 
+## ویژگی های اصلی
 
-## Getting started
+### 📊 آمار و اطلاعات
+- نمایش تعداد کل دانش آموزان
+- نمایش تعداد دانش آموزان فعال (تایید شده)
+- نمایش تعداد دانش آموزان در انتظار تایید
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### 📝 فرم افزودن دانش آموز
+- **نام و نام خانوادگی**: اعتبارسنجی حداقل 3 کاراکتر
+- **شماره تماس**: اعتبارسنجی 11 رقم
+- **شماره تلفن ثابت**: اختیاری
+- **نام پدر**: اعتبارسنجی حداقل 2 کاراکتر
+- **نام مادر**: اعتبارسنجی حداقل 2 کاراکتر
+- **تاریخ تولد**: استفاده از Persian DatePicker
+- **سن**: محاسبه خودکار بر اساس تاریخ تولد
+- **کد ملی**: اعتبارسنجی 10 رقم با الگوریتم ایرانی
+- **درباره من**: حداقل 20 کاراکتر با placeholder مناسب
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### 📋 جدول دانش آموزان
+- **نمایش اطلاعات**: نام، شماره تماس، نام پدر، سن، کد ملی، وضعیت
+- **عملیات**: درباره کاربر، ویرایش، حذف، انتخاب به عنوان برترین
+- **وضعیت**: تایید شده / در انتظار تایید
+- **جستجو**: قابلیت جستجو در تمام فیلدها
+- **مرتب سازی**: مرتب سازی بر اساس هر ستون
+- **صفحه بندی**: انتخاب تعداد آیتم در هر صفحه (10، 25، 50، همه)
 
-## Add your files
+### 🔧 قابلیت های پیشرفته
+- **اعتبارسنجی فرم**: استفاده از jQuery Validation
+- **Persian DatePicker**: انتخاب تاریخ شمسی
+- **اعتبارسنجی کد ملی**: الگوریتم صحیح ایرانی
+- **ریسپانسیو**: سازگار با تمام دستگاه ها
+- **RTL**: پشتیبانی کامل از راست به چپ
+- **Modal**: نمایش اطلاعات و ویرایش در پنجره های جداگانه
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## تکنولوژی های استفاده شده
+
+### Frontend
+- **HTML5**: ساختار صفحه
+- **CSS3**: استایل و طراحی
+- **JavaScript**: تعامل و منطق برنامه
+- **jQuery**: کتابخانه JavaScript
+- **Bootstrap 5**: فریم ورک CSS
+- **Font Awesome**: آیکون ها
+
+### کتابخانه های JavaScript
+- **jQuery Validation**: اعتبارسنجی فرم
+- **Persian DatePicker**: انتخاب تاریخ شمسی
+- **DataTables**: جدول پیشرفته با قابلیت جستجو و مرتب سازی
+
+## ساختار فایل ها
 
 ```
-cd existing_repo
-git remote add origin https://git.nehzat128.ir/trainee-projects/lesson-planner.git
-git branch -M main
-git push -uf origin main
+timeLine/
+├── admin/
+│   └── index.html          # صفحه اصلی پنل مدیریت
+├── assets/
+│   ├── fonts/
+│   │   └── Vazir.ttf      # فونت فارسی
+│   ├── js/
+│   │   └── admin.js       # اسکریپت های پنل مدیریت
+│   ├── styles/
+│   │   └── admin.css      # استایل های پنل مدیریت
+│   └── vendor/            # کتابخانه های خارجی
+└── README.md              # مستندات پروژه
 ```
 
-## Integrate with your tools
+## نحوه استفاده
 
-- [ ] [Set up project integrations](https://git.nehzat128.ir/trainee-projects/lesson-planner/-/settings/integrations)
+### 1. افزودن دانش آموز جدید
+1. فرم افزودن دانش آموز را پر کنید
+2. تاریخ تولد را از تقویم شمسی انتخاب کنید
+3. کد ملی معتبر وارد کنید
+4. روی دکمه "ثبت دانش آموز" کلیک کنید
 
-## Collaborate with your team
+### 2. مدیریت دانش آموزان
+- **مشاهده اطلاعات**: روی آیکون کاربر کلیک کنید
+- **ویرایش**: روی آیکون ویرایش کلیک کنید
+- **حذف**: روی آیکون حذف کلیک کنید
+- **انتخاب برترین**: روی آیکون ستاره کلیک کنید
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### 3. جستجو و فیلتر
+- از جعبه جستجو برای یافتن دانش آموز استفاده کنید
+- روی سرستون ها برای مرتب سازی کلیک کنید
+- تعداد آیتم در هر صفحه را تنظیم کنید
 
-## Test and Deploy
+## ویژگی های امنیتی
 
-Use the built-in continuous integration in GitLab.
+- **اعتبارسنجی سمت کلاینت**: بررسی صحت داده ها قبل از ارسال
+- **اعتبارسنجی کد ملی**: الگوریتم صحیح ایرانی
+- **تایید حذف**: درخواست تایید قبل از حذف
+- **محافظت از داده ها**: بررسی صحت تمام ورودی ها
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## سازگاری
 
-***
+- **مرورگرها**: Chrome، Firefox، Safari، Edge
+- **دستگاه ها**: دسکتاپ، تبلت، موبایل
+- **رزولوشن**: تمام سایزهای صفحه
 
-# Editing this README
+## نمونه داده
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+پروژه شامل 20 دانش آموز نمونه با اطلاعات کامل است که برای تست و نمایش قابلیت ها استفاده می شود.
 
-## Suggestions for a good README
+## توسعه آینده
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- اتصال به پایگاه داده
+- سیستم احراز هویت
+- گزارش گیری پیشرفته
+- ارسال ایمیل و پیامک
+- API برای اپلیکیشن موبایل
 
-## Name
-Choose a self-explaining name for your project.
+## پشتیبانی
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+برای سوالات و مشکلات، لطفاً با تیم توسعه تماس بگیرید.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**توسعه یافته با ❤️ برای مدیریت بهتر دانش آموزان**

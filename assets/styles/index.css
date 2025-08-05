@@ -40,7 +40,6 @@ body {
 .dashboard-container {
     max-width: 1200px;
     margin: auto;
-    background: #fff;
     border-radius: 1rem;
     box-shadow: 0 0 16px #0001;
     padding: 2rem 1.5rem;
@@ -260,3 +259,219 @@ body {
     box-shadow: 0 0 10px #0001;
     padding: 1.5rem;
 }
+
+/* ======================
+   TABLE STYLES - Recordings
+   ====================== */
+
+.recordings-table-container {
+    margin-top: 2rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    font-size: 0.9rem;
+}
+
+.recordings-table-container h4 {
+    color: #3a3a3a;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: right;
+    border-bottom: 2px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+    color: #3a3a3a;
+}
+
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(248, 249, 250, 0.7);
+    transform: scale(1.005);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Status Colors */
+.status-reviewed {
+    color: #28a745;
+}
+
+/* سبز */
+.status-pending {
+    color: #ffc107;
+}
+
+/* زرد */
+.status-not-sent {
+    color: #dc3545;
+}
+
+/* قرمز */
+
+/* Play Button */
+.play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.play-btn:hover {
+    background: #0b5ed7;
+    transform: scale(1.05);
+}
+
+.play-btn.disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* Grade Colors - استفاده از کلاس‌های موجود */
+.grade-excellent {
+    color: #28a745;
+}
+
+.grade-good {
+    color: #17a2b8;
+}
+
+.grade-average {
+    color: #ffc107;
+}
+
+.grade-poor {
+    color: #fd7e14;
+}
+
+.grade-fail {
+    color: #dc3545;
+}
+
+/* Media Queries for Responsive Table */
+@media (max-width: 992px) {
+    /* Tablet styles */
+    .recordings-table-container {
+      padding: 1rem;
+    }
+    
+    .table th, 
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .play-btn {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* Mobile styles - Stacked layout */
+    .table thead {
+      display: none;
+    }
+    
+    .table, 
+    .table tbody, 
+    .table tr, 
+    .table td {
+      display: block;
+      width: 100%;
+    }
+    
+    .table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      position: relative;
+    }
+    
+    .table td {
+      padding: 0.5rem;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .table td:before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #495057;
+      margin-left: 0.5rem;
+    }
+    
+    .table td:last-child {
+      border-bottom: none;
+    }
+    
+    /* Add data-labels for mobile view */
+    .table td:nth-child(1) { data-label: "ردیف"; }
+    .table td:nth-child(2) { data-label: "زمان ضبط"; }
+    .table td:nth-child(3) { data-label: "نمره کیفی"; }
+    .table td:nth-child(4) { data-label: "پخش"; }
+    .table td:nth-child(5) { data-label: "بازخورد دبیر"; }
+    .table td:nth-child(6) { data-label: "وضعیت ارسال"; }
+    
+    .play-btn {
+      margin-right: auto;
+      margin-left: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    /* Small mobile devices */
+    .recordings-table-container {
+      padding: 0.5rem;
+    }
+    
+    .table td {
+      font-size: 0.85rem;
+    }
+    
+    .table td:before {
+      font-size: 0.8rem;
+    }
+  }
+

@@ -6,32 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>داشبورد پیشرفت دروس</title>
   <!-- Bootstrap -->
-  <link href="./assets/vendor/bootstrap/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/bootstrap.rtl.min.css" rel="stylesheet">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="./assets/vendor/font-awesome/css/all.css">
+  <link rel="stylesheet" href="../assets/vendor/font-awesome/css/all.css">
   <!-- Limonad.js (timeline) -->
-  <script src="./assets/vendor/lemonadejs/lemonade.min.js"></script>
+  <script src="../assets/vendor/lemonadejs/lemonade.min.js"></script>
   <!-- Tippy.js -->
-  <link rel="stylesheet" href="./assets/vendor/tippyjs/tippy.css">
-  <script src="./assets/vendor/popperjs/popper.min.js"></script>
-  <script src="./assets/vendor/tippyjs/tippy-bundle.umd.min.js"></script>
+  <link rel="stylesheet" href="../assets/vendor/tippyjs/tippy.css">
+  <script src="../assets/vendor/popperjs/popper.min.js"></script>
+  <script src="../assets/vendor/tippyjs/tippy-bundle.umd.min.js"></script>
   <!-- Highcharts -->
-  <script src="./assets/vendor/highcharts/highcharts.js"></script>
-  <link rel="stylesheet" href="./assets/styles/index.css">
+  <script src="../assets/vendor/highcharts/highcharts.js"></script>
+  <link rel="stylesheet" href="../assets/styles/index.css">
 </head>
 
 <body>
   <!-- Site Header -->
   <header class="site-header">
     <div class="d-flex align-items-center gap-2">
-      <img src="./assets/medai/nehzat.png" alt="لوگو سایت"
+      <img src="../assets/medai/nehzat.png" alt="لوگو سایت"
         style="height:48px;width:auto;border-radius:0.5rem;box-shadow:0 2px 8px #0001;">
     </div>
-    <nav class="nav">
-      <a class="nav-link" href="#"><i class="fa fa-home"></i> خانه</a>
-      <a class="nav-link" href="#"><i class="fa fa-chart-line"></i> گزارش کلی</a>
-      <a class="nav-link" href="#"><i class="fa fa-book"></i> منابع</a>
-    </nav>
+
     <div class="dropdown">
       <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-user-circle"></i>
@@ -46,7 +42,7 @@
       </ul>
     </div>
   </header>
-  <div class="dashboard-container row flex-nowrap">
+  <div class="dashboard-container bg-white row flex-nowrap">
     <aside class="col-12 col-md-3" id="sidebarMenu">
       <div class="lesson-menu flex-md-column" id="lessonMenu"></div>
     </aside>
@@ -58,6 +54,26 @@
         <div id="progressChart"></div>
       </div>
       <iframe style="width: 100%;height: 400px;" src="./sound.html" frameborder="0"></iframe>
+      <div class="recordings-table-container mt-4">
+        <h4 class="mb-3">وضعیت صوت‌های ضبط شده</h4>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ردیف</th>
+                <th>زمان ضبط</th>
+                <th>نمره کیفی</th>
+                <th>پخش</th>
+                <th>بازخورد دبیر</th>
+                <th>وضعیت ارسال</th>
+              </tr>
+            </thead>
+            <tbody id="recordingsTableBody">
+              <!-- Dynamic content will be loaded here from index.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </main>
   </div>
   <!-- Modal -->
@@ -74,8 +90,8 @@
       </div>
     </div>
   </div>
-  <script src="./assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
-  <script src="./assets/js/index.js"></script>
+  <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../assets/js/index.js"></script>
 </body>
 
 </html>

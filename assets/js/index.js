@@ -1,513 +1,128 @@
-// داده‌های نمونه دروس و مراحل
-const lessons = [
-    {
-        id: 'quran',
-        name: 'قرآن',
-        icon: 'fa-quran',
-        image: 'quran_yung.png',
-        description: 'حفظ و تلاوت سوره‌های مختلف قرآن کریم به همراه ارزیابی ماهانه و بازخورد معلم.',
-        timeline: [
-            {
-                surah: 'دو هفته اول',
-                ayat: '۱ تا ۷',
-                score: 19.5,
-                score_qualitative: 'ممتاز',
-                teacher: 'آقای رضایی',
-                feedback: 'شروع عالی! تسلط و تلفظ بسیار خوب.',
-                progress: 100,
-                details: [
-                    { date: '۱۴۰۲/۷/۱', from: 1, to: 3, surah: "الفاتحه", score: "19", type: "حفظ" },
-                    { date: '۱۴۰۲/۷/۲', from: 4, to: 7, surah: "الفاتحه", score: "15", type: "حفظ" }
-                ]
-            },
-            {
-                surah: 'دو هفته دوم',
-                ayat: '۱ تا ۲۰',
-                score: 17.8,
-                score_qualitative: 'عالی',
-                teacher: 'آقای رضایی',
-                feedback: 'حفظ خوب اما نیاز به مرور بیشتر.',
-                progress: 100,
-                details: [
-                    { date: '۱۴۰۲/۷/۵', from: 1, to: 10, surah: "بقره", score: "17", type: "حفظ" },
-                    { date: '۱۴۰۲/۷/۷', from: 11, to: 20, surah: "بقره", score: "17", type: "حفظ" }
-                ]
-            },
-            {
-                surah: 'دو هفته سوم',
-                ayat: '۱ تا ۳۰',
-                score: 15.2,
-                score_qualitative: 'خوب',
-                teacher: 'آقای رضایی',
-                feedback: 'برخی آیات نیاز به تکرار دارند.',
-                progress: 90,
-                details: [
-                    { date: '۱۴۰۲/۸/۱', from: 1, to: 15, surah: "بقره", score: "17" },
-                    { date: '۱۴۰۲/۸/۳', from: 16, to: 30, surah: "بقره", score: "17" }
-                ]
-            },
-            {
-                surah: 'دو هفته چهارم',
-                ayat: '۱ تا ۲۰',
-                score: 12.5,
-                score_qualitative: 'متوسط',
-                teacher: 'آقای رضایی',
-                feedback: 'نیاز به تلاش بیشتر و تمرین.',
-                progress: 60,
-                details: [
-                    { date: '۱۴۰۲/۹/۱', from: 1, to: 10, surah: "بقره", score: "17" },
-                    { date: '۱۴۰۲/۹/۴', from: 11, to: 20, surah: "بقره", score: "17" }
-                ]
-            },
-            {
-                surah: 'دو هفته پنجم',
-                ayat: '۱ تا ۲۰',
-                score: null,
-                teacher: 'آقای رضایی',
-                feedback: 'نیاز به تلاش بیشتر و تمرین.',
-                progress: 60,
-                details: [
-                    { date: '۱۴۰۲/۹/۱', from: 1, to: 10, surah: "بقره", score: "17" },
-                    { date: '۱۴۰۲/۹/۴', from: 11, to: 20, surah: "بقره", score: "17" }
-                ]
-            },
-        ]
-    },
-    {
-        id: 'arabi',
-        name: 'عربی',
-        icon: 'fa-language',
-        image: 'irabic.jpg',
-        description: 'یادگیری قواعد و ترجمه متون عربی، تمرین ترجمه و درک مطلب.',
-        timeline: [
-            {
-                surah: 'درس ۱',
-                ayat: 'صفحه ۱ تا ۵',
-                score: 18.2,
-                score_qualitative: 'ممتاز',
-                teacher: 'خانم موسوی',
-                feedback: 'درک مطلب عالی و ترجمه روان.',
-                progress: 100,
-                details: [
-                    { date: '۱۴۰۲/۷/۳', from: 1, to: 3 },
-                    { date: '۱۴۰۲/۷/۵', from: 4, to: 5 }
-                ]
-            },
-            {
-                surah: 'درس ۲',
-                ayat: 'صفحه ۶ تا ۱۰',
-                score: 16.7,
-                score_qualitative: 'عالی',
-                teacher: 'خانم موسوی',
-                feedback: 'نیاز به تمرین بیشتر در قواعد.',
-                progress: 90,
-                details: [
-                    { date: '۱۴۰۲/۷/۱۰', from: 6, to: 8 },
-                    { date: '۱۴۰۲/۷/۱۲', from: 9, to: 10 }
-                ]
-            },
-            {
-                surah: 'درس ۳',
-                ayat: 'صفحه ۱۱ تا ۱۵',
-                score: 14.1,
-                score_qualitative: 'خوب',
-                teacher: 'خانم موسوی',
-                feedback: 'مرور قواعد فراموش نشود.',
-                progress: 80,
-                details: [
-                    { date: '۱۴۰۲/۸/۱', from: 11, to: 13 },
-                    { date: '۱۴۰۲/۸/۳', from: 14, to: 15 }
-                ]
-            }
-        ]
-    },
-    {
-        id: 'adabiat',
-        name: 'ادبیات',
-        icon: 'fa-book-open',
-        image: 'ferdossi.jpg',
-        description: 'مطالعه و تحلیل متون ادبی فارسی، شعر و نثر و یادگیری آرایه‌های ادبی.',
-        timeline: [
-            {
-                surah: 'درس ۱',
-                ayat: 'صفحه ۱ تا ۴',
-                score: 17.5,
-                score_qualitative: 'عالی',
-                teacher: 'آقای احمدی',
-                feedback: 'تحلیل شعر عالی انجام شده.',
-                progress: 100,
-                details: [
-                    { date: '۱۴۰۲/۷/۲', from: 1, to: 2 },
-                    { date: '۱۴۰۲/۷/۴', from: 3, to: 4 }
-                ]
-            },
-            {
-                surah: 'درس ۲',
-                ayat: 'صفحه ۵ تا ۸',
-                score: 15.9,
-                score_qualitative: 'خوب',
-                teacher: 'آقای احمدی',
-                feedback: 'آرایه‌ها نیاز به تمرین بیشتر دارد.',
-                progress: 85,
-                details: [
-                    { date: '۱۴۰۲/۷/۸', from: 5, to: 6 },
-                    { date: '۱۴۰۲/۷/۱۰', from: 7, to: 8 }
-                ]
-            }
-        ]
-    },
-    {
-        id: 'teb',
-        name: 'طب',
-        icon: 'fa-heart-pulse',
-        image: 'doctor.jpeg',
-        description: 'آشنایی با مبانی طب سنتی و نوین، یادگیری مفاهیم سلامت و بهداشت.',
-        timeline: [
-            {
-                surah: 'مبحث ۱',
-                ayat: 'صفحه ۱ تا ۳',
-                score: 18.8,
-                score_qualitative: 'ممتاز',
-                teacher: 'دکتر نادری',
-                feedback: 'مفاهیم به خوبی درک شده.',
-                progress: 100,
-                details: [
-                    { date: '۱۴۰۲/۷/۱', from: 1, to: 3 }
-                ]
-            },
-            {
-                surah: 'مبحث ۲',
-                ayat: 'صفحه ۴ تا ۶',
-                score: 13.2,
-                score_qualitative: 'متوسط',
-                teacher: 'دکتر نادری',
-                feedback: 'نیاز به مرور بیشتر.',
-                progress: 70,
-                details: [
-                    { date: '۱۴۰۲/۷/۵', from: 4, to: 6 }
-                ]
-            }
-        ]
-    }
-];
+import {render_user} from "../js/users/render-user.js"
 
-// وضعیت و رنگ نمره کیفی
-function getQualitativeStatus(qual) {
-    switch (qual) {
-        case 'ممتاز':
-            return { color: 'green', emoji: '🟢', score: 5 }
-            break;
-        case 'عالی':
-            return { color: 'blue', emoji: '🔵', score: 4 }
-            break;
-        case 'خوب':
-            return { color: 'yellow', emoji: '🟡', score: 3 }
-            break;
-        case 'متوسط':
-            return { color: 'orange', emoji: '🟠', score: 2 }
-            break;
-        case 'سعی بیشتر':
-            return { color: 'red', emoji: '🔴', score: 1 }
-            break;
-        default:
-            return { color: 'gray', emoji: '⚪', score: 0 }
-            break;
-    }
-}
-// وضعیت و رنگ نمره کمی (برای نمودار کمی)
-function getScoreStatus(score) {
-    if (score >= 18) return { color: 'green', emoji: '🟢', status: 'قبول شده است' };
-    if (score >= 16) return { color: 'blue', emoji: '🔵', status: 'قبول شده است' };
-    if (score >= 13) return { color: 'yellow', emoji: '🟡', status: 'قبول شده است' };
-    return { color: 'red', emoji: '🔴', status: 'مردود' };
-}
-// منوی دروس
-function renderLessonMenu(selectedId) {
-    const menu = document.getElementById('lessonMenu');
-    menu.innerHTML = '';
-    // دکمه همه دروس
-    const allBtn = document.createElement('button');
-    allBtn.className = 'lesson-btn' + (!selectedId ? ' active' : '');
-    allBtn.innerHTML = `<i class="fa fa-layer-group"></i> همه دروس`;
-    allBtn.disabled = "true"
-    allBtn.style.display = "none"
-    allBtn.onclick = () => {
-        renderLessonMenu(null);
-        renderLessonInfo(null);
-        renderTimeline(null);
-        renderChart(null);
-    };
-    menu.appendChild(allBtn);
-    lessons.forEach(lesson => {
-        const btn = document.createElement('button');
-        btn.className = 'lesson-btn' + (lesson.id === selectedId ? ' active' : '');
-        btn.style.display = lesson.name !== 'قرآن' ? " none" : "block"
-        btn.innerHTML = `<i class="fa ${lesson.icon}"></i> ${lesson.name}`;
-        if (lesson.name == 'قرآن') btn.id = "quran"
-        btn.onclick = () => {
-            renderLessonMenu(lesson.id);
-            renderLessonInfo(lesson);
-            renderTimeline(lesson);
-            renderChart(lesson);
-        };
-        menu.appendChild(btn);
-    });
-}
-
-// اطلاعات کلی درس یا همه دروس
-function renderLessonInfo(lesson) {
-    const info = document.getElementById('lessonInfo');
-    if (!lesson) {
-        info.innerHTML = `<div class="mb-3 text-center"><strong>عملکرد کلی همه دروس در نمودار زیر قابل مشاهده است.</strong></div>`;
-        return;
-    }
-    info.innerHTML = `
-  <div class="mb-3 text-center">
-    <img src="./assets/medai/${lesson.image}" alt="${lesson.name}" style="max-width:160px;max-height:110px;border-radius:1rem;box-shadow:0 2px 8px #0002;margin-bottom:1rem;">
-        </div>
-  <div class="mb-3"><strong>درباره درس:</strong> ${lesson.description}</div>
-`;
-}
-// تایم‌لاین فقط برای درس انتخابی
-function renderTimeline(lesson) {
-    const container = document.getElementById('timelineContainer');
-    container.innerHTML = '';
-    if (!lesson) return;
-    // افقی
-    const horiz = document.createElement('div');
-    horiz.className = 'timeline-horizontal';
-    lesson.timeline.forEach((item, idx) => {
-        if (idx > 0) {
-            const bar = document.createElement('div');
-            bar.className = 'timeline-bar';
-            horiz.appendChild(bar);
-        }
-        const qual = getQualitativeStatus(item.score_qualitative);
-        // نقطه و لیبل زیر آن
-        const dotLabelWrap = document.createElement('div');
-        dotLabelWrap.style.display = 'flex';
-        dotLabelWrap.style.flexDirection = 'column';
-        dotLabelWrap.style.alignItems = 'center';
-        dotLabelWrap.style.minWidth = '60px';
-        const dot = document.createElement('div');
-        dot.className = `timeline-dot ${qual.color}`;
-        dot.setAttribute('data-tippy-content', `بازخورد: <b class='score-${qual.color}'>${item.score_qualitative}</b>`);
-        dot.innerHTML = `<i class=\"fa ${lesson.icon}\"></i>`;
-        dot.onclick = () => showDetailModal(lesson, item);
-        const label = document.createElement('div');
-        label.className = 'timeline-label';
-        label.innerText = item.surah;
-        dotLabelWrap.appendChild(dot);
-        dotLabelWrap.appendChild(label);
-        horiz.appendChild(dotLabelWrap);
-    });
-    container.appendChild(horiz);
-    // عمودی (موبایل) - ساختار مستقل و وسط‌چین
-    const vert = document.createElement('div');
-    vert.className = 'timeline-vertical-custom';
-    //vert.style.display = 'flex';
-    vert.style.flexDirection = 'column';
-    vert.style.alignItems = 'center';
-    vert.style.width = '100%';
-    lesson.timeline.forEach((item, idx) => {
-        // نقطه و لیبل زیر آن
-        const dotLabelWrap = document.createElement('div');
-        dotLabelWrap.style.display = 'flex';
-        dotLabelWrap.style.flexDirection = 'column';
-        dotLabelWrap.style.alignItems = 'center';
-        dotLabelWrap.style.justifyContent = 'center';
-        dotLabelWrap.style.width = '70px';
-        dotLabelWrap.style.margin = '0 auto';
-        const qual = getQualitativeStatus(item.score_qualitative);
-        const dot = document.createElement('div');
-        dot.className = `timeline-dot ${qual.color}`;
-        dot.setAttribute('data-tippy-content', `بازخورد: <b class='score-${qual.color}'>${item.score_qualitative}</b>`);
-        dot.innerHTML = `<i class=\"fa ${lesson.icon}\"></i>`;
-        dot.onclick = () => showDetailModal(lesson, item);
-        const label = document.createElement('div');
-        label.className = 'timeline-label';
-        label.innerText = item.surah;
-        dotLabelWrap.appendChild(dot);
-        dotLabelWrap.appendChild(label);
-        vert.appendChild(dotLabelWrap);
-        if (idx < lesson.timeline.length - 1) {
-            const bar = document.createElement('div');
-            bar.className = 'timeline-bar-vertical-custom';
-            bar.style.width = '6px';
-            bar.style.height = '40px';
-            bar.style.background = 'linear-gradient(180deg, #e0e0e0 60%, #ed12a3 100%)';
-            bar.style.margin = '0.2rem auto';
-            bar.style.borderRadius = '3px';
-            vert.appendChild(bar);
-        }
-    });
-    container.appendChild(vert);
-    // فعال‌سازی tooltip
-    setTimeout(() => {
-        tippy('.timeline-dot', { allowHTML: true, placement: 'top', theme: 'light-border' });
-    }, 100);
-}
-// مدال جزئیات
-function showDetailModal(lesson, item) {
-    // معدل کمی و کیفی درس
-    console.log(lesson.timeline);
-
-    // بیشترین تکرار کیفی
-    const status = getScoreStatus(item.score);
-    const qual = getQualitativeStatus(item.score_qualitative);
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-  <h5><i class="fa ${lesson.icon}"></i> ${item.surah}</h5>
-  <p>آیات: ${item.ayat}</p>
-  <p>نام دبیر: <b>${item.teacher}</b></p>
-  <p>نمره این بخش: <span class="score-${status.color}">${item.score}</span> <span class="status-emoji">${status.emoji}</span></p>
-  <p>بازخورد کیفی این بخش: <span class="score-${qual.color}">${item.score_qualitative}</span> <span class="status-emoji">${qual.emoji}</span></p>
-  <div class="progress mb-3">
-    ${item.details.map(d => `
-    <span class="progress-bar" role="progressbar" style="background-color:${getScoreStatus(d.score).color};width: calc(100%/${item.details.length}*(${d.score}/20))" aria-valuenow="${item.progress}" aria-valuemin="0" aria-valuemax="100"></span>`)
-        }
-    </div>
-    <div class="progress mb-3">
-      ${`<div class="progress-bar" role="progressbar" style="height: 5px,background-color:blue;width: calc(100%*${item.details.length}/3)" aria-valuenow="${item.progress}" aria-valuemin="0" aria-valuemax="100"></div>`}
-    </div>
-  <div class="alert alert-info"><b>بازخورد معلم:</b> ${item.feedback}</div>
-  <h6 class="mt-3">مراحل حفظ/مطالعه:</h6>
-  <ul>
-    ${item.details.map(d => `
-      <li>
-        <br />
-        <ul>
-          <li>نوع: ${d.type}</li>
-          <li>سوره: ${d.surah}</li>
-          <li>${d.date} — از آیه ${d.from} تا ${d.to}</li>  
-          <li>نمره: <span style="color:${getScoreStatus(d.score).color}">${d.score}</span></li>
-        </ul>
-      </li>
-    `).join('')}
-  </ul>
-`;
-    const modal = new bootstrap.Modal(document.getElementById('detailModal'));
-    modal.show();
-}
-
-// نمودار خطی پیشرفت
-function renderChart(lesson) {
-    document.querySelector("#progressChart").innerHTML = ""
-    // نمودار کلی همه دروس (کیفی)
-    const categories = lessons[0].timeline.map(item => item.surah);
-
-    const series = ([lesson?.timeline][0] ? [lesson.timeline] : lessons).map(lesson1 => {
-        return {
-            name: lesson?.name || lesson1.name,
-            data: lesson1.timeline ? lesson1.timeline.map(x => getQualitativeStatus(x.
-                score_qualitative).score) : lesson1.map(x => getQualitativeStatus(x.score_qualitative).score),
-            zones: [{
-                value: 3,
-                color: '#f15c80' // زیر آستانه = رنگ مردودی
-            }, {
-                color: '#7cb5ec' // بالای آستانه = رنگ اوکی
-            }]
-        };
-    });
-    Highcharts.chart('progressChart', {
-        chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
-        title: { text: 'مقایسه عملکرد کیفی همه دروس' },
-        xAxis: {
-            categories,
-            title: { text: 'مراحل' },
-            labels: {
-                formatter: function () { return this.value; }
-            }
-        },
-        yAxis: {
-            min: 1,
-            max: 5,
-            tickInterval: 1,
-            title: { text: 'بازخورد کیفی' },
-            labels: {
-                formatter: function () {
-                    return ['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.value];
-                }
-            },
-            plotLines: [{
-                value: 3, // مقدار خط آستانه
-                color: 'red',
-                dashStyle: 'Dash',
-                width: 2,
-                label: {
-                    text: 'حد مردودی',
-                    align: 'right',
-                    style: {
-                        color: 'red',
-                        fontWeight: 'bold'
-                    }
-                }
-            }]
-        },
-        tooltip: {
-            formatter: function () {
-                return `<b>${this.series.name}</b><br>مرحله: ${this.x}<br>بازخورد: <b>${['', 'سعی بیشتر', 'متوسط', 'خوب', 'عالی', 'ممتاز'][this.y]}</b>`;
-            },
-            useHTML: true
-        },
-        series,
-        credits: { enabled: false },
-
-    });
-
-    // نمودار کمی درس انتخابی
-    // const categories = lesson.timeline.map(item => item.surah);
-    // const scores = lesson.timeline.map(item => item.score);
-    // Highcharts.chart('progressChart', {
-    //   chart: { type: 'line', style: { fontFamily: 'Vazirmatn, sans-serif' } },
-    //   title: { text: 'روند پیشرفت نمرات' },
-    //   xAxis: { categories, title: { text: 'مراحل' } },
-    //   yAxis: {
-    //     min: 0,
-    //     max: 20,
-    //     tickInterval: 2,
-    //     title: { text: 'نمره' },
-    //     plotBands: [
-    //       {
-    //         from: 0,
-    //         to: 12,
-    //         color: 'rgba(255, 0, 0, 0.2)',
-    //         label: {
-    //           text: 'مردود',
-    //           style: { color: 'red' }
-    //         }
-    //       },
-    //       {
-    //         from: 12,
-    //         to: 20,
-    //         color: 'rgba(0, 255, 0, 0.2)',
-    //         label: {
-    //           text: 'قابل قبول',
-    //           style: { color: 'green' }
-    //         }
-    //       }
-    //     ],
-    //     plotLines: [{
-    //       value: 12,
-    //       color: 'red',
-    //       width: 2,
-    //       dashStyle: 'Dash',
-    //       label: {
-    //         text: 'آستانه',
-    //         align: 'right',
-    //         style: { color: 'red' }
-    //       }
-    //     }]
-    //   },
-    //   tooltip: { valueSuffix: ' نمره' },
-    //   series: [{ name: 'نمره', data: scores, color: '#ed12a3', marker: { enabled: true, radius: 5 } }],
-    //   credits: { enabled: false }
-    // });
-
-}
+const {renderChart,renderLessonInfo,renderLessonMenu,renderTimeline} = render_user
 // مقداردهی اولیه
 renderLessonMenu(null);
 renderLessonInfo(null);
 renderTimeline(null);
 renderChart(null);
 document.getElementById("quran").click()
+
+// Audio recordings data
+const recordingsData = [
+    {
+        id: 1,
+        recordTime: '۱۴۰۲/۰۵/۱۵ - ۱۴:۳۰',
+        grade: 'excellent',
+        feedback: 'تلفظ بسیار خوب بود، فقط روی مکث‌ها بیشتر کار کنید.',
+        status: 'reviewed'
+    },
+    {
+        id: 2,
+        recordTime: '۱۴۰۲/۰۵/۱۰ - ۱۰:۱۵',
+        grade: 'good',
+        feedback: 'کلمات را واضح‌تر بیان کنید.',
+        status: 'reviewed'
+    },
+    {
+        id: 3,
+        recordTime: '۱۴۰۲/۰۵/۰۵ - ۰۸:۴۵',
+        grade: 'average',
+        feedback: 'در حال بررسی',
+        status: 'pending'
+    },
+    {
+        id: 4,
+        recordTime: '۱۴۰۲/۰۴/۲۸ - ۱۶:۲۰',
+        status: 'not-sent'
+    },
+    {
+        id: 5,
+        recordTime: '۱۴۰۲/۰۴/۲۰ - ۱۱:۰۰',
+        status: 'not-sent'
+    }
+];
+
+// Grade mapping
+const gradeMap = {
+    excellent: 'عالی',
+    good: 'خوب',
+    average: 'متوسط',
+    poor: 'ضعیف',
+    fail: 'نیاز به تلاش بیشتر'
+};
+
+// Status mapping
+const statusMap = {
+    reviewed: 'بررسی شده',
+    pending: 'در حال بررسی',
+    'not-sent': 'ارسال نشده'
+};
+
+// Function to render recordings table
+function renderRecordingsTable() {
+    const tableBody = document.getElementById('recordingsTableBody');
+    tableBody.innerHTML = '';
+
+    const columnLabels = [
+        "ردیف",
+        "زمان ضبط",
+        "نمره کیفی",
+        "پخش",
+        "بازخورد دبیر",
+        "وضعیت ارسال"
+    ];
+
+    recordingsData.forEach((recording, index) => {
+        const row = document.createElement('tr');
+
+        if (recording.status === 'not-sent') {
+            row.classList.add('text-muted');
+        }
+
+        let gradeDisplay = '-';
+        let gradeClass = '';
+        if (recording.grade) {
+            gradeDisplay = gradeMap[recording.grade];
+            gradeClass = `grade-${recording.grade}`;
+        }
+
+        const playButton = recording.status === 'not-sent'
+            ? '<button class="play-btn disabled" disabled><i class="fas fa-play"></i></button>'
+            : `<button class="play-btn"><i class="fas fa-play"></i></button>`;
+
+        let statusClass = '';
+        if (recording.status) {
+            statusClass = `status-${recording.status.replace(' ', '-')}`;
+        }
+
+        // Create cells with data-label attributes
+        const cells = [
+            { value: index + 1, class: '' },
+            { value: recording.recordTime, class: '' },
+            { value: gradeDisplay, class: gradeClass },
+            { value: playButton, class: '' },
+            { value: recording.feedback || '-', class: '' },
+            { value: statusMap[recording.status] || 'ارسال نشده', class: statusClass }
+        ];
+
+        cells.forEach((cell, i) => {
+            const td = document.createElement('td');
+            td.innerHTML = cell.value;
+            if (cell.class) td.className = cell.class;
+            td.setAttribute('data-label', columnLabels[i]);
+            row.appendChild(td);
+        });
+
+        tableBody.appendChild(row);
+    });
+
+    document.querySelectorAll('.play-btn:not(.disabled)').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            console.log('Playing audio...');
+        });
+    });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', renderRecordingsTable);
