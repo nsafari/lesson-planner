@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ورود | نهضت</title>
+    <link href="../assets/vendor/bootstrap/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/all.css">
+    <link rel="stylesheet" href="../assets/styles/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="./nehzat.png" alt="لوگو سایت">
+            <span>نهضت</span>
+        </div>
+        <form id="loginForm" autocomplete="off">
+            <div class="mb-3">
+                <label for="username" class="form-label">نام کاربری</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">رمز عبور</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="code" class="form-label">کد ورود</label>
+                <input type="text" class="form-control" id="code" name="code" required>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="#" class="forgot-link">فراموشی رمز عبور؟</a>
+            </div>
+            <button type="submit" class="btn login-btn">ورود</button>
+        </form>
+        <div class="quran-gif" id="quranGifContainer" style="display:none;">
+            <img id="quranGif" src="./quran-light 00_00_00-00_00_30.gif" alt="قرآن"
+                style="max-width:220px;max-height:180px;">
+        </div>
+    </div>
+
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../assets/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../assets/js/login.js"></script>
+</body>
+
+</html>

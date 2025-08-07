@@ -1,0 +1,96 @@
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazir.ttf');
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Vazirmatn', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 0 16px #0002;
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 370px;
+    width: 100%;
+    margin: 2rem auto;
+    position: relative;
+}
+
+.login-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-logo img {
+    width: 70%;
+    height: 70px;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px #0001;
+}
+
+.login-logo span {
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-top: 0.5rem;
+    color: #ed12a3;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.form-control {
+    border-radius: 0.7rem;
+    font-size: 1.05rem;
+}
+
+.login-btn {
+    width: 100%;
+    border-radius: 0.7rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: #ed12a3;
+    color: #fff;
+    margin-top: 1.2rem;
+}
+
+.login-btn:active {
+    background: #c00b7e;
+}
+
+.forgot-link {
+    color: #ed12a3;
+    font-size: 0.98rem;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.quran-gif {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 1s;
+    height: 180px;
+}
+
+@media (max-width: 500px) {
+    .login-container {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+        max-width: 98vw;
+    }
+
+    .quran-gif img {
+        width: 90vw;
+        max-width: 260px;
+    }
+}
