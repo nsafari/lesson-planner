@@ -1,0 +1,6 @@
+dist/**
+public/**
+
+# SQLite database
+*.sqlite
+*.sqlite-journal
