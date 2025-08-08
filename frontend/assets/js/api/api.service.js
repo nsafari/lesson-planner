@@ -1,3 +1,6 @@
+import { showStudentModal } from "../users/render-user.js";
+import { base64ToObject } from "../utilites/byte64.js";
+
 const API_BASE = 'http://localhost:3000';
 
 /**
@@ -47,7 +50,7 @@ export class ApiService {
    * دریافت ارسال‌های دانش‌آموز (اختیاری: فیلتر بر اساس تکلیف)
    */
   static async getStudentSubmissions(studentId, assignmentId = null) {
-    const url = assignmentId 
+    const url = assignmentId
       ? `${API_BASE}/students/${studentId}/submissions?assignmentId=${assignmentId}`
       : `${API_BASE}/students/${studentId}/submissions`;
     const response = await fetch(url, {
@@ -86,5 +89,32 @@ export class ApiService {
       headers: this.getHeaders()
     });
     return await response.json();
+  }
+
+  /**
+   * دریافت پیشرفت دانش‌آموز در یک تکلیف مشخص
+   */
+  static async submitSigninUser(data) {
+    const response = await fetch(`${API_BASE}/auth/signin`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return await "کاربر وجود ندارد"
+    }
+  }
+
+  static async getUserData() {
+    const id = base64ToObject(localStorage.getItem("user")).id    
+    let response = await fetch(`${API_BASE}/students/${id}`);
+    response = await response.json()
+    document.querySelector(".fa-cog").parentNode.addEventListener("click",() => showStudentModal(response))
+    
+
+    document.getElementById("user-name-dropDown").innerHTML = response.firstName + " " + response.lastName
+    document.getElementById("user-email-dropDown").innerHTML = response.email
   }
 } 

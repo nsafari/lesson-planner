@@ -1,5 +1,6 @@
 import { utilities_user } from "./utilities-user.js";
 import { ApiService } from "../api/api.service.js";
+import { base64ToObject } from "../utilites/byte64.js";
 
 const { getQualitativeStatus, getScoreStatus } = utilities_user;
 
@@ -259,7 +260,7 @@ function getSubmissionStatus(assignment) {
 }
 
 // ثبت کار روزانه
-window.submitDailyWork = async function(assignmentId) {
+window.submitDailyWork = async function (assignmentId) {
     try {
         const submissionData = {
             dailyScore: 85, // TODO: از فرم دریافت شود
@@ -277,5 +278,25 @@ window.submitDailyWork = async function(assignmentId) {
         alert('خطا در ثبت کار روزانه');
     }
 };
+
+ApiService.getUserData()
+
+// تابع برای نمایش مدال با اطلاعات
+export function showStudentModal(data) {
+    document.getElementById('firstName').textContent = data.firstName || '';
+    document.getElementById('lastName').textContent = data.lastName || '';
+    document.getElementById('email').textContent = data.email || '';
+    document.getElementById('phoneNumber').textContent = data.phoneNumber || '';
+    document.getElementById('studentId').textContent = data.studentId || '';
+    document.getElementById('status').textContent = data.status || '';
+    document.getElementById('dateOfBirth').textContent = data.dateOfBirth || '';
+    document.getElementById('address').textContent = data.address || '';
+    document.getElementById('createdAt').textContent = data.createdAt?.split('T')[0] || '';
+    document.getElementById('updatedAt').textContent = data.updatedAt?.split('T')[0] || '';
+
+    // نمایش مدال
+    const modal = new bootstrap.Modal(document.getElementById('studentModal'));
+    modal.show();
+}
 
 export const render_user = { renderLessonMenu, renderLessonInfo, renderTimeline, showDetailModal, renderChart };

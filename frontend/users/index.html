@@ -24,7 +24,7 @@
   <!-- Site Header -->
   <header class="site-header">
     <div class="d-flex align-items-center gap-2">
-      <img src="../assets/medai/nehzat.png" alt="لوگو سایت"
+      <img src="../assets/media/nehzat.png" alt="لوگو سایت"
         style="height:48px;width:auto;border-radius:0.5rem;box-shadow:0 2px 8px #0001;">
     </div>
 
@@ -33,8 +33,10 @@
         <i class="fa fa-user-circle"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> پروفایل</a></li>
-        <li><a class="dropdown-item" href="#"><i class="fa fa-cog"></i> تنظیمات</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> <span id="user-name-dropDown"></span> </a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa fa-envelope-open-text"></i> <span
+              id="user-email-dropDown"></span> </a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa fa-cog"></i> نمایش جزئیات</a></li>
         <li>
           <hr class="dropdown-divider">
         </li>
@@ -86,6 +88,43 @@
         </div>
         <div class="modal-body" id="modalBody">
           <!-- جزئیات مرحله اینجا قرار می‌گیرد -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- مدال -->
+  <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header text-white" style="background-color: #ff004b;">
+          <h5 class="modal-title" id="studentModalLabel">اطلاعات دانشجو</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="بستن"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>نام:</strong> <span id="firstName"></span></div>
+            <div class="col-md-6"><strong>نام خانوادگی:</strong> <span id="lastName"></span></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>ایمیل:</strong> <span id="email"></span></div>
+            <div class="col-md-6"><strong>شماره تماس:</strong> <span id="phoneNumber"></span></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>کد دانشجویی:</strong> <span id="studentId"></span></div>
+            <div class="col-md-6"><strong>وضعیت:</strong> <span id="status"></span></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>تاریخ تولد:</strong> <span id="dateOfBirth"></span></div>
+            <div class="col-md-6"><strong>آدرس:</strong> <span id="address"></span></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>تاریخ ثبت:</strong> <span id="createdAt"></span></div>
+            <div class="col-md-6"><strong>آخرین بروزرسانی:</strong> <span id="updatedAt"></span></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
         </div>
       </div>
     </div>

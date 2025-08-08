@@ -1,5 +1,5 @@
 import { Controller, Post, Body, BadRequestException, UseInterceptors, UploadedFile } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from '../user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from  'multer';
 import { extname } from  'path';
@@ -22,7 +22,7 @@ export class AuthController {
       if (!user) {
         throw new BadRequestException('User not found');
       }
-      return { message: 'Sign-in successful', username: user.username, imageUrl: user.imageUrl };
+      return { message: 'Sign-in successful', username: user.username, imageUrl: user.imageUrl,id: user.id };
   }
 
   @Post('signup')

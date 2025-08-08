@@ -1,6 +1,37 @@
+import { ApiService } from "./api/api.service.js";
+import { objectToBase64 } from "./utilites/byte64.js";
+
 const form = document.getElementById('loginForm');
 const gifContainer = document.getElementById('quranGifContainer');
 const gif = document.getElementById('quranGif');
+
+async function handleSubmit(form1) {
+    const formData = new FormData(form1);
+    const data = Object.fromEntries(formData.entries());
+
+    const result = await ApiService.submitSigninUser(data);
+    console.log(result.username);
+
+    if (!result.username) {
+        Swal.fire({
+            title: "خطا!",
+            text: result,
+            icon: "error"
+        });
+    }
+    else {
+        localStorage.setItem("user", objectToBase64(result))
+        Swal.fire({
+            title: "ورود موفق",
+            icon: "success"
+        });
+
+        setTimeout(
+            () => window.location.href = window.location.host + "/frontend/users/index.html", 1000
+        )
+    }
+    return true
+}
 
 $("#loginForm").validate({
     rules: {
@@ -49,11 +80,12 @@ $("#loginForm").validate({
         error.insertAfter(element);
     },
     submitHandler: function (form1) {
-        console.log(form1);
-        
+        const formData = new FormData(form1);
+        const data = Object.fromEntries(formData.entries());
         form.style.transition = 'opacity 1s';
         form.style.opacity = 0;
-        setTimeout(() => {
+        handleSubmit(form1)
+        let interVal = setTimeout(() => {
             form.style.display = 'none';
             gifContainer.style.display = 'flex';
             setTimeout(() => {
@@ -63,11 +95,15 @@ $("#loginForm").validate({
             }, 50);
         }, 1000);
 
+        setTimeout(() => {
+            window.location.reload()
+        }, 5000);
+
+
         return false;
     }
 });
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();
-
 });

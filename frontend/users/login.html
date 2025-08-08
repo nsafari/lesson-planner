@@ -13,8 +13,7 @@
 <body>
     <div class="login-container">
         <div class="login-logo">
-            <img src="./nehzat.png" alt="لوگو سایت">
-            <span>نهضت</span>
+            <img src="../assets/media/nehzat.png" alt="لوگو سایت">
         </div>
         <form id="loginForm" autocomplete="off">
             <div class="mb-3">
@@ -35,14 +34,15 @@
             <button type="submit" class="btn login-btn">ورود</button>
         </form>
         <div class="quran-gif" id="quranGifContainer" style="display:none;">
-            <img id="quranGif" src="./quran-light 00_00_00-00_00_30.gif" alt="قرآن"
+            <img id="quranGif" src="../assets/media/quran-light 00_00_00-00_00_30.gif" alt="قرآن"
                 style="max-width:220px;max-height:180px;">
         </div>
     </div>
 
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../assets/vendor/jquery-validation/jquery.validate.min.js"></script>
-    <script src="../assets/js/login.js"></script>
+    <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script type="module" src="../assets/js/login.js"></script>
 </body>
 
 </html>

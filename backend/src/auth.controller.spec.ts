@@ -1,4 +1,4 @@
-import { AuthController } from './auth.controller';
+import { AuthController } from './controllers/auth.controller';
 import { UserService } from './user.service';
 import { Test } from '@nestjs/testing';
 

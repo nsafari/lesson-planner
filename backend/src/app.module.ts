@@ -4,7 +4,7 @@ import { Module, OnModuleInit } from '@nestjs/common';
  * پایگاه‌داده SQLite برای توسعه استفاده می‌شود و جداول به‌صورت خودکار همگام می‌شوند.
  */
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthController } from './auth.controller';
+import { AuthController } from './controllers/auth.controller';
 import { AuthGuard } from './auth.guard';
 import { UserService } from './user.service';
 import { StudentController } from './controllers/student.controller';
