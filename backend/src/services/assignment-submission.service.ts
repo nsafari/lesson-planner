@@ -98,6 +98,12 @@ export class AssignmentSubmissionService {
     return await this.findById(id);
   }
 
+  /** به‌روزرسانی فایل ارسال */
+  async updateSubmissionFile(submissionId: number, fileUrl: string): Promise<AssignmentSubmission> {
+    await this.submissionRepository.update(submissionId, { audioFileUrl: fileUrl });
+    return await this.findById(submissionId);
+  }
+
   /** حذف ارسال */
   async delete(id: number): Promise<void> {
     await this.submissionRepository.delete(id);

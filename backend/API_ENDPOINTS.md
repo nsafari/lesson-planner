@@ -11,17 +11,103 @@ Authorization: Bearer <token>
 
 ## Endpoints
 
+### Admin Management - جدید
+**پیشوند: `/admin`** (نیاز به احراز هویت)
+
+#### مدیریت دوره‌ها
+- `GET /admin/courses` - دریافت همه دوره‌ها با جزئیات کامل
+- `GET /admin/courses/:id` - دریافت دوره با شناسه و تمام جزئیات
+- `POST /admin/courses` - ایجاد دوره جدید
+- `PUT /admin/courses/:id` - به‌روزرسانی دوره
+- `DELETE /admin/courses/:id` - حذف دوره
+
+#### مدیریت تکالیف
+- `GET /admin/courses/:courseId/assignments` - دریافت همه تکالیف یک دوره
+- `GET /admin/assignments/:id` - دریافت تکلیف خاص با ضمیمه‌ها
+- `POST /admin/courses/:courseId/assignments` - ایجاد تکلیف جدید برای دوره
+- `PUT /admin/assignments/:id` - به‌روزرسانی تکلیف
+- `DELETE /admin/assignments/:id` - حذف تکلیف
+- `POST /admin/courses/:courseId/assignments/daily-series` - ایجاد سری تکالیف روزانه
+
+#### مدیریت ضمیمه‌ها
+- `GET /admin/assignments/:assignmentId/attachments` - دریافت همه ضمیمه‌های یک تکلیف
+- `POST /admin/assignments/:assignmentId/attachments` - ایجاد ضمیمه جدید برای تکلیف (با فایل)
+- `POST /admin/attachments/:id/upload` - آپلود فایل برای ضمیمه موجود
+- `PUT /admin/attachments/:id` - به‌روزرسانی ضمیمه
+- `DELETE /admin/attachments/:id` - حذف ضمیمه
+
+#### مدیریت کاربران
+- `GET /admin/users/pending` - دریافت کاربران در انتظار تایید
+- `POST /admin/users/:userId/approve` - تایید کاربر و ایجاد دانش‌آموز
+  - Body:
+    ```json
+    {
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "email": "user@example.com",
+      "phoneNumber": "09123456789",
+      "studentId": "ST004",
+      "courseIds": [1, 2]
+    }
+    ```
+- `POST /admin/users/:userId/reject` - رد کردن کاربر
+
+#### گزارش‌گیری
+- `GET /admin/statistics` - دریافت آمار کلی سیستم
+- `GET /admin/courses/:courseId/statistics` - دریافت گزارش دوره خاص
+- `GET /admin/courses/search?q=query` - جستجوی دوره‌ها
+- `GET /admin/courses/filter?status=active` - فیلتر دوره‌ها بر اساس وضعیت
+
 ### Authentication
 - `POST /auth/login` - Login with username and password
-- `POST /auth/register` - Register new user
+  - Returns user type ('student' or 'admin') and student info if applicable
+  - Checks approval status (pending/rejected users cannot login)
+  - Example response for student:
+    ```json
+    {
+      "message": "Sign-in successful",
+      "username": "ali.ahmadi",
+      "imageUrl": null,
+      "userType": "student",
+      "studentId": 1,
+      "studentInfo": {
+        "firstName": "علی",
+        "lastName": "احمدی",
+        "email": "ali.ahmadi@example.com",
+        "studentId": "ST001"
+      }
+    }
+    ```
+- `POST /auth/register` - Register new user (requires approval)
+  - Body:
+    ```json
+    {
+      "username": "newuser",
+      "password": "password123",
+      "retryPassword": "password123",
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "email": "user@example.com",
+      "phoneNumber": "09123456789"
+    }
+    ```
+  - Response:
+    ```json
+    {
+      "message": "ثبت نام با موفقیت انجام شد. در انتظار تایید مدیر سیستم هستید.",
+      "status": "pending"
+    }
+    ```
 
 ### Students
 - `GET /students` - Get all students
 - `GET /students/:id` - Get student by ID
+- `GET /students/me/profile` - Get current student profile (based on auth token)
 - `GET /students/:id/progress` - Get student progress (courses + submissions)
 - `GET /students/:id/assignments/:assignmentId/progress` - Get progress for a specific (daily) assignment
 - `GET /students/:id/submissions?assignmentId=1` - List submissions (optional filter by assignment)
-- `POST /students/:id/assignments/:assignmentId/submit` - Submit daily work
+- `POST /students/:id/assignments/:assignmentId/submit` - Submit daily work (with file upload)
+- `POST /students/:id/submissions/:submissionId/upload` - Upload file for existing submission
 
 ### Courses
 - `GET /courses` - Get all courses
