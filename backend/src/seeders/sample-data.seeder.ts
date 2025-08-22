@@ -7,6 +7,7 @@ import { Assignment } from '../entities/assignment.entity';
 import { StudentCourse } from '../entities/student-course.entity';
 import { AssignmentSubmission } from '../entities/assignment-submission.entity';
 import { AssignmentAttachment } from '../entities/assignment-attachment.entity';
+import { UserService } from '../user.service';
 
 /**
  * سرویس «نمونه داده‌های نمونه» برای ایجاد داده‌های اولیه جهت تست و توسعه.
@@ -26,6 +27,7 @@ export class SampleDataSeeder {
     private submissionRepository: Repository<AssignmentSubmission>,
     @InjectRepository(AssignmentAttachment)
     private attachmentRepository: Repository<AssignmentAttachment>,
+    private userService: UserService,
   ) { }
 
   /** اجرای فرآیند نمونه داده‌ها */
@@ -35,6 +37,10 @@ export class SampleDataSeeder {
     // ایجاد دانش‌آموزان نمونه
     const students = await this.createStudents();
     console.log(`✅ Created ${students.length} students`);
+
+    // ایجاد کاربران و ارتباط با دانش‌آموزان
+    await this.createUsersForStudents(students);
+    console.log('✅ Created users and linked to students');
 
     // ایجاد دوره‌های نمونه
     const courses = await this.createCourses();
@@ -97,6 +103,24 @@ export class SampleDataSeeder {
     }
 
     return students;
+  }
+
+  /** ایجاد کاربران و ارتباط با دانش‌آموزان */
+  private async createUsersForStudents(students: Student[]): Promise<void> {
+    const userData = [
+      { username: 'ali.ahmadi', password: 'password123', studentId: 1 },
+      { username: 'fateme.mohammadi', password: 'password123', studentId: 2 },
+      { username: 'mohammad.rezaei', password: 'password123', studentId: 3 },
+    ];
+
+    for (const data of userData) {
+      try {
+        await this.userService.createUser(data.username, data.password, null, data.studentId);
+        console.log(`✅ Created user ${data.username} linked to student ${data.studentId}`);
+      } catch (error) {
+        console.log(`⚠️ User ${data.username} already exists or error: ${error.message}`);
+      }
+    }
   }
 
   /** ایجاد لیست دوره‌های نمونه */

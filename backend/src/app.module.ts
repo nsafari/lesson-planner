@@ -9,6 +9,7 @@ import { AuthGuard } from './auth.guard';
 import { UserService } from './user.service';
 import { StudentController } from './controllers/student.controller';
 import { CourseController } from './controllers/course.controller';
+import { AdminController } from './controllers/admin.controller';
 import { SeederController } from './controllers/seeder.controller';
 import { StudentService } from './services/student.service';
 import { CourseService } from './services/course.service';
@@ -35,7 +36,7 @@ import { User } from './entities/user.entity';
     }),
     TypeOrmModule.forFeature([Student, Course, Assignment, AssignmentSubmission, StudentCourse, AssignmentAttachment, User]),
   ],
-  controllers: [AuthController, StudentController, CourseController, SeederController],
+  controllers: [AuthController, StudentController, CourseController, AdminController, SeederController],
   providers: [UserService, AuthGuard, StudentService, CourseService, AssignmentSubmissionService, SampleDataSeeder],
 })
 export class AppModule implements OnModuleInit {
