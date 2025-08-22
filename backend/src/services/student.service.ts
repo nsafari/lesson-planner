@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Student } from '../entities/student.entity';
+import { UserService } from '../user.service';
 
 /**
  * سرویس «دانش‌آموز» برای مدیریت عملیات پایگاه‌داده و منطق تجاری مرتبط با دانش‌آموزان.
@@ -11,6 +12,7 @@ export class StudentService {
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    private userService: UserService,
   ) {}
 
   /** ایجاد دانش‌آموز جدید */
@@ -40,6 +42,15 @@ export class StudentService {
       where: { email },
       relations: ['studentCourses', 'studentCourses.course'],
     });
+  }
+
+  /** دریافت دانش‌آموز با نام‌کاربری */
+  async findByUsername(username: string): Promise<Student> {
+    const user = await this.userService.findUserWithStudent(username);
+    if (!user || !user.student) {
+      throw new Error('Student not found for this user');
+    }
+    return await this.findById(user.student.id);
   }
 
   /** به‌روزرسانی اطلاعات دانش‌آموز */

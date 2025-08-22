@@ -18,11 +18,55 @@ export class AuthController {
     if (!isValid) {
       throw new BadRequestException('Invalid credentials');
     }
-    const user = await this.userService.findUser(username);
+    const user = await this.userService.findUserWithStudent(username);
       if (!user) {
         throw new BadRequestException('User not found');
       }
-      return { message: 'Sign-in successful', username: user.username, imageUrl: user.imageUrl };
+
+      // بررسی وضعیت تایید کاربر
+      if (user.approvalStatus === 'pending') {
+        throw new BadRequestException('حساب کاربری شما در انتظار تایید مدیر سیستم است');
+      }
+
+      if (user.approvalStatus === 'rejected') {
+        throw new BadRequestException('حساب کاربری شما رد شده است. لطفاً با مدیر سیستم تماس بگیرید');
+      }
+      
+      // اگر کاربر دانش‌آموز است، اطلاعات دانش‌آموز را برگردان
+      if (user.userType === 'student' && user.student) {
+        return { 
+          message: 'Sign-in successful', 
+          username: user.username, 
+          imageUrl: user.imageUrl,
+          userType: 'student',
+          studentId: user.student.id,
+          studentInfo: {
+            firstName: user.student.firstName,
+            lastName: user.student.lastName,
+            email: user.student.email,
+            studentId: user.student.studentId
+          }
+        };
+      }
+      
+      // اگر کاربر مدیر است
+      if (user.userType === 'admin') {
+        return { 
+          message: 'Sign-in successful', 
+          username: user.username, 
+          imageUrl: user.imageUrl,
+          userType: 'admin'
+        };
+      }
+
+      // اگر کاربر تایید شده اما دانش‌آموز نیست
+      return { 
+        message: 'Sign-in successful', 
+        username: user.username, 
+        imageUrl: user.imageUrl,
+        userType: 'student',
+        approvalStatus: user.approvalStatus
+      };
   }
 
   @Post('signup')
@@ -39,6 +83,10 @@ export class AuthController {
     @Body('username') username: string,
     @Body('password') password: string,
     @Body('retryPassword') retryPassword: string,
+    @Body('firstName') firstName: string,
+    @Body('lastName') lastName: string,
+    @Body('email') email: string,
+    @Body('phoneNumber') phoneNumber: string,
     @UploadedFile() userImage: Express.Multer.File,
   ) {
     if (password !== retryPassword) {
@@ -51,8 +99,17 @@ export class AuthController {
     }
 
     try {
-      await this.userService.createUser(username, password, imageUrl);
-      return { message: 'ثبت نام با موفقیت انجام شد' };
+      // ایجاد کاربر با وضعیت pending
+      await this.userService.createPendingUser(username, password, imageUrl, {
+        firstName,
+        lastName,
+        email,
+        phoneNumber
+      });
+      return { 
+        message: 'ثبت نام با موفقیت انجام شد. در انتظار تایید مدیر سیستم هستید.',
+        status: 'pending'
+      };
     } catch (error) {
       throw new BadRequestException(`خطا در ثبت نام: ${error.message}`);
     }

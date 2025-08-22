@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Student } from './student.entity';
 
 /**
  * مدل «کاربر» برای احراز هویت در سیستم
@@ -21,9 +22,32 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   imageUrl: string | null;
 
+  /** شناسه دانش‌آموز مرتبط (اختیاری) */
+  @Column({ type: 'int', nullable: true })
+  studentId: number | null;
+
+  /**
+   * وضعیت تایید کاربر: pending | approved | rejected
+   */
+  @Column({ type: 'varchar', length: 50, default: 'pending' })
+  approvalStatus: string;
+
+  /**
+   * نوع کاربر: student | admin
+   */
+  @Column({ type: 'varchar', length: 50, default: 'student' })
+  userType: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  /**
+   * رابطه با دانش‌آموز (هر کاربر می‌تواند یک دانش‌آموز باشد)
+   */
+  @ManyToOne(() => Student, { nullable: true })
+  @JoinColumn({ name: 'studentId' })
+  student: Student;
 } 
