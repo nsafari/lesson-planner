@@ -3,6 +3,7 @@ import { StudentService } from '../services/student.service';
 import { AssignmentSubmissionService } from '../services/assignment-submission.service';
 import { AuthGuard } from '../auth.guard';
 import { Student } from '../entities/student.entity';
+import { log } from 'console';
 
 /**
  * کنترلر «دانش‌آموز» برای مدیریت APIهای مربوط به دانش‌آموزان و پیشرفت آن‌ها.
@@ -13,7 +14,7 @@ export class StudentController {
   constructor(
     private readonly studentService: StudentService,
     private readonly submissionService: AssignmentSubmissionService,
-  ) {}
+  ) { }
 
   /** ایجاد دانش‌آموز جدید */
   @Post()
@@ -25,6 +26,16 @@ export class StudentController {
   @Get()
   async findAll() {
     return await this.studentService.findAll();
+  }
+
+  @Post('findByEmail_Phone')
+  async getStudentByEmail_Phone(
+    @Body('email') email: string,
+    @Body('phoneNumber') phoneNumber: string,
+  ): Promise<Student | null> {
+    const Mail = await this.studentService.findByEmail(email);
+    if (!Mail) return null;  // اگر ایمیل پیدا نشد
+    return Mail.phoneNumber === phoneNumber ? Mail : null;
   }
 
   /** دریافت اطلاعات دانش‌آموز */

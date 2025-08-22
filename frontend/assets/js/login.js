@@ -8,11 +8,10 @@ const gif = document.getElementById('quranGif');
 async function handleSubmit(form1) {
     const formData = new FormData(form1);
     const data = Object.fromEntries(formData.entries());
+    
+    const result = await ApiService.signInStudent(data);
 
-    const result = await ApiService.submitSigninUser(data);
-    console.log(result.username);
-
-    if (!result.username) {
+    if (!result.email) {
         Swal.fire({
             title: "خطا!",
             text: result,
@@ -27,7 +26,7 @@ async function handleSubmit(form1) {
         });
 
         setTimeout(
-            () => window.location.href = window.location.host + "/frontend/users/index.html", 1000
+            () => window.location.href = "/frontend/users/login.html", 1000
         )
     }
     return true
@@ -35,14 +34,16 @@ async function handleSubmit(form1) {
 
 $("#loginForm").validate({
     rules: {
-        username: {
+        email: {
             required: true,
-            minlength: 3
+            email: true
         },
-        password: {
+        phoneNumber: {
             required: true,
-            minlength: 6
+            minlength: 6,
+            digits: true
         },
+
         code: {
             required: true,
             digits: true,
@@ -51,13 +52,13 @@ $("#loginForm").validate({
         }
     },
     messages: {
-        username: {
-            required: "لطفاً نام کاربری را وارد کنید",
-            minlength: "نام کاربری باید حداقل ۳ کاراکتر باشد"
+        email: {
+            required: "لطفاً ایمیل را وارد کنید",
+            email: "لطفاً یک ایمیل معتبر وارد کنید"
         },
-        password: {
-            required: "لطفاً رمز عبور را وارد کنید",
-            minlength: "رمز عبور باید حداقل ۶ کاراکتر باشد"
+        phoneNumber: {
+            required: "لطفاً شماره تلفن را وارد کنید",
+            minlength: "شماره تلفن باید حداقل ۶ کاراکتر باشد"
         },
         code: {
             required: "لطفاً کد ورود را وارد کنید",
@@ -80,10 +81,9 @@ $("#loginForm").validate({
         error.insertAfter(element);
     },
     submitHandler: function (form1) {
-        const formData = new FormData(form1);
-        const data = Object.fromEntries(formData.entries());
         form.style.transition = 'opacity 1s';
         form.style.opacity = 0;
+
         handleSubmit(form1)
         let interVal = setTimeout(() => {
             form.style.display = 'none';

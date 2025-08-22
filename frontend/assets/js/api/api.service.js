@@ -1,4 +1,3 @@
-import { showStudentModal } from "../users/render-user.js";
 import { base64ToObject } from "../utilites/byte64.js";
 
 const API_BASE = 'http://localhost:3000';
@@ -6,6 +5,25 @@ const API_BASE = 'http://localhost:3000';
 /**
  * سرویس ارتباط با API برای دریافت و ارسال داده‌ها
  */
+
+// تابع برای نمایش مدال با اطلاعات
+function showStudentModal(data) {
+  document.getElementById('firstName').textContent = data.firstName || '';
+  document.getElementById('lastName').textContent = data.lastName || '';
+  document.getElementById('email').textContent = data.email || '';
+  document.getElementById('phoneNumber').textContent = data.phoneNumber || '';
+  document.getElementById('studentId').textContent = data.studentId || '';
+  document.getElementById('status').textContent = data.status || '';
+  document.getElementById('dateOfBirth').textContent = data.dateOfBirth || '';
+  document.getElementById('address').textContent = data.address || '';
+  document.getElementById('createdAt').textContent = data.createdAt?.split('T')[0] || '';
+  document.getElementById('updatedAt').textContent = data.updatedAt?.split('T')[0] || '';
+
+  // نمایش مدال
+  const modal = new bootstrap.Modal(document.getElementById('studentModal'));
+  modal.show();
+}
+
 export class ApiService {
   static token = null;
 
@@ -108,13 +126,31 @@ export class ApiService {
   }
 
   static async getUserData() {
-    const id = base64ToObject(localStorage.getItem("user")).id    
+    const id = base64ToObject(localStorage.getItem("user")).id
     let response = await fetch(`${API_BASE}/students/${id}`);
     response = await response.json()
-    document.querySelector(".fa-cog").parentNode.addEventListener("click",() => showStudentModal(response))
-    
+    document.querySelector(".fa-cog").parentNode.addEventListener("click", () => showStudentModal(response))
+
 
     document.getElementById("user-name-dropDown").innerHTML = response.firstName + " " + response.lastName
     document.getElementById("user-email-dropDown").innerHTML = response.email
   }
-} 
+
+  static async signInStudent(data) {
+    const response = await fetch(`${API_BASE}/students/findByEmail_Phone`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data)
+    });
+
+    const dt = (await response.text());
+
+    if (dt) {
+      const js = JSON.parse(dt);
+      console.log(js);
+      return js;
+    } else {
+      return "کاربر وجود ندارد"
+    }
+  }
+}
