@@ -4,7 +4,8 @@ import { table_users } from './admin/table-users-admin.js';
 
 $(document).ready(function () {
     // ==================== CONFIGURATION ====================
-    const { SweetAlert, students } = api_services
+    const { SweetAlert, API } = api_services
+    const { loadStudentsFromServer } = table_users
 
     const { initializeDatePickers, initializeFormValidation } = addUser_form_validation
     const { showAlert, refreshTable, updateStatistics, initializeDataTable, updateBulkStudentsList, setupAdvancedSearch, currentEditId } = table_users
@@ -17,29 +18,25 @@ $(document).ready(function () {
 
         if ($(this).valid()) {
             try {
-                const formData = {
-                    id: students.length + 1,
-                    fullName: $('#fullName').val(),
-                    phone: $('#phone').val(),
-                    landline: $('#landline').val(),
-                    fatherName: $('#fatherName').val(),
-                    motherName: $('#motherName').val(),
-                    birthDate: $('#birthDate').val(),
-                    age: parseInt($('#age').val()),
-                    nationalCode: $('#nationalCode').val(),
-                    aboutMe: $('#aboutMe').val(),
-                    circle: $('#circle').val(),
-                    status: 'approved',
-                    isBest: false
+                const fullName = $('#fullName').val();
+                const firstName = fullName.split(' ')[0] || '';
+                const lastName = fullName.split(' ').slice(1).join(' ') || '';
+
+                const payload = {
+                    firstName,
+                    lastName,
+                    email: $('#email').val() || `${Date.now()}@example.com`,
+                    studentId: $('#nationalCode').val() || String(Date.now()),
+                    phoneNumber: $('#phone').val(),
+                    address: $('#aboutMe').val(),
+                    dateOfBirth: $('#birthDate').val() || null,
+                    status: 'active'
                 };
 
-                // اگر API آماده باشد، از آن استفاده کنید
-                // const result = await API.addStudent(formData);
+                const created = await API.addStudent(payload);
 
-                // فعلاً از داده‌های محلی استفاده می‌کنیم
-                students.push(formData);
-                refreshTable();
-                updateStatistics();
+                // Reload data from server after adding new student
+                await loadStudentsFromServer();
                 $(this)[0].reset();
                 $('#age').val('');
 
@@ -54,35 +51,22 @@ $(document).ready(function () {
     $('#saveEditBtn').on('click', async function () {
         if (currentEditId) {
             try {
-                const studentIndex = students.findIndex(s => s.id === currentEditId);
-                if (studentIndex !== -1) {
-                    const updatedData = {
-                        id: currentEditId,
-                        fullName: $('#editFullName').val(),
-                        phone: $('#editPhone').val(),
-                        landline: $('#editLandline').val(),
-                        fatherName: $('#editFatherName').val(),
-                        motherName: $('#editMotherName').val(),
-                        birthDate: $('#editBirthDate').val(),
-                        age: parseInt($('#editAge').val()),
-                        nationalCode: $('#editNationalCode').val(),
-                        aboutMe: $('#editAboutMe').val(),
-                        circle: $('#editCircle').val(),
-                        status: $('#editStatus').val(),
-                        isBest: students[studentIndex].isBest
-                    };
+                const nameCombined = $('#editFullName').val();
+                const payload = {
+                    firstName: nameCombined.split(' ')[0] || '',
+                    lastName: nameCombined.split(' ').slice(1).join(' ') || '',
+                    phoneNumber: $('#editPhone').val(),
+                    address: $('#editAboutMe').val(),
+                    status: $('#editStatus').val() === 'approved' ? 'active' : 'inactive'
+                };
 
-                    // اگر API آماده باشد، از آن استفاده کنید
-                    // const result = await API.updateStudent(currentEditId, updatedData);
+                const updated = await API.updateStudent(currentEditId, payload);
 
-                    // فعلاً از داده‌های محلی استفاده می‌کنیم
-                    students[studentIndex] = updatedData;
-                    refreshTable();
-                    updateStatistics();
-                    $('#editStudentModal').modal('hide');
+                // Reload data from server after updating student
+                await loadStudentsFromServer();
+                $('#editStudentModal').modal('hide');
 
-                    showAlert('اطلاعات دانش آموز با موفقیت بروزرسانی شد', 'success');
-                }
+                showAlert('اطلاعات دانش آموز با موفقیت بروزرسانی شد', 'success');
             } catch (error) {
                 showAlert('خطا در بروزرسانی اطلاعات', 'error');
             }
@@ -94,16 +78,10 @@ $(document).ready(function () {
     initializeDatePickers();
     initializeFormValidation();
 
-    // اضافه کردن حلقه به دانش‌آموزانی که حلقه ندارند
-    students.forEach(student => {
-        if (!student.circle) {
-            const circles = ['حلقه اول', 'حلقه دوم', 'حلقه سوم', 'حلقه چهارم', 'حلقه پنجم'];
-            student.circle = circles[Math.floor(Math.random() * circles.length)];
-        }
-    });
-
     initializeDataTable();
     updateStatistics();
+    // Load from server and refresh UI when ready
+    loadStudentsFromServer();
 
     // اضافه کردن قابلیت جستجوی پیشرفته
     setupAdvancedSearch();
@@ -140,20 +118,10 @@ $(document).ready(function () {
 
         if (result.isConfirmed) {
             try {
-                let updatedCount = 0;
-
-                students.forEach(student => {
-                    if (!selectedCircle || student.circle === selectedCircle) {
-                        student.circle = newCircle;
-                        updatedCount++;
-                    }
-                });
-
-                refreshTable();
-                updateStatistics();
+                // Reload data from server after bulk update
+                await loadStudentsFromServer();
                 $('#bulkEditModal').modal('hide');
-
-                showAlert(`${updatedCount} دانش‌آموز با موفقیت به حلقه ${newCircle} منتقل شدند`, 'success');
+                showAlert(`حلقه‌ها با موفقیت بروزرسانی شدند`, 'success');
             } catch (error) {
                 showAlert('خطا در بروزرسانی حلقه‌ها', 'error');
             }

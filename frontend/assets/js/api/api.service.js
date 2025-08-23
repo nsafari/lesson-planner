@@ -2,6 +2,11 @@ import { base64ToObject } from "../utilites/byte64.js";
 
 const API_BASE = 'http://localhost:3000';
 
+// Get auth token from localStorage
+function getAuthToken() {
+    return localStorage.getItem('token') || localStorage.getItem('user');
+}
+
 /**
  * سرویس ارتباط با API برای دریافت و ارسال داده‌ها
  */
@@ -38,9 +43,10 @@ export class ApiService {
    * ساخت هدرهای درخواست با توکن
    */
   static getHeaders() {
+    const token = this.token || getAuthToken();
     return {
       'Content-Type': 'application/json',
-      ...(this.token ? { Authorization: `Bearer ${this.token}` } : {})
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
     };
   }
 
@@ -87,6 +93,67 @@ export class ApiService {
       body: JSON.stringify(submissionData)
     });
     return await response.json();
+  }
+
+  /**
+   * ارسال کار روزانه با فایل صوتی برای یک تکلیف
+   */
+  static async submitDailyWorkWithAudio(studentId, assignmentId, audioBlob, submissionData = {}) {
+    try {
+      console.log(audioBlob);
+      
+      const formData = new FormData();
+      formData.append('audioFile', audioBlob, 'recording.wav');
+      
+      // اضافه کردن داده‌های تکلیف به فرم
+      Object.keys(submissionData).forEach(key => {
+        formData.append(key, submissionData[key]);
+      });
+
+      const token = this.token || getAuthToken();
+      const response = await fetch(`${API_BASE}/students/${studentId}/assignments/${assignmentId}/submit`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+          // حذف Content-Type برای FormData
+        },
+        body: formData
+      });
+      // محتوای پاسخ را فقط یک بار بخوان
+      const responseText = await response.text();
+
+      // بررسی وضعیت HTTP
+      if (!response.ok) {
+        let errorMessage = `خطای HTTP: ${response.status}`;
+        try {
+          const errorJson = responseText ? JSON.parse(responseText) : null;
+          if (errorJson) {
+            errorMessage = errorJson.message || errorJson.error || errorMessage;
+          } else if (responseText) {
+            errorMessage = responseText;
+          }
+        } catch (_) {
+          if (responseText) errorMessage = responseText;
+        }
+        throw new Error(errorMessage);
+      }
+
+      // اگر پاسخ خالی است
+      if (!responseText) {
+        return { success: true, message: 'فایل صوتی با موفقیت ارسال شد' };
+      }
+
+      // تلاش برای پارس JSON
+      try {
+        return JSON.parse(responseText);
+      } catch (_) {
+        return { success: true, message: responseText || 'فایل صوتی با موفقیت ارسال شد' };
+      }
+
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
   }
 
   /**
@@ -151,6 +218,52 @@ export class ApiService {
       return js;
     } else {
       return "کاربر وجود ندارد"
+    }
+  },
+
+  /**
+   * دریافت ارسال‌های دانش‌آموز با جزئیات کامل
+   */
+  static async getStudentSubmissionsWithDetails(studentId) {
+    try {
+      const response = await fetch(`${API_BASE}/students/${studentId}/submissions`, {
+        headers: this.getHeaders()
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const submissions = await response.json();
+      
+      // برای هر ارسال، اطلاعات تکلیف را هم دریافت کن
+      const submissionsWithDetails = await Promise.all(
+        submissions.map(async (submission) => {
+          try {
+            const assignmentResponse = await fetch(`${API_BASE}/courses/${submission.assignmentId}/assignments`, {
+              headers: this.getHeaders()
+            });
+            
+            if (assignmentResponse.ok) {
+              const assignments = await assignmentResponse.json();
+              const assignment = assignments.find(a => a.id === submission.assignmentId);
+              return {
+                ...submission,
+                assignment: assignment || null
+              };
+            }
+            return submission;
+          } catch (error) {
+            console.warn('Error fetching assignment details:', error);
+            return submission;
+          }
+        })
+      );
+      
+      return submissionsWithDetails;
+    } catch (error) {
+      console.error('Error fetching student submissions:', error);
+      throw error;
     }
   }
 }

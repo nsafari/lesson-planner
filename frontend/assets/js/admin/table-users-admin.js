@@ -1,13 +1,39 @@
 import { api_services } from './api-servies-admin.js';
 
-var students;
+var students = [];
 var SweetAlert;
 
+// Load students from server
+async function loadStudentsFromServer() {
+    try {
+        const serverStudents = await api_services.API.getStudents();
+        // نگاشت فیلدهای بک‌اند به ساختار مورد انتظار جدول فعلی
+        students = (serverStudents || []).map((s) => ({
+            id: s.id,
+            fullName: [s.firstName, s.lastName].filter(Boolean).join(' ') || '',
+            phone: s.phoneNumber || '',
+            landline: '',
+            fatherName: '',
+            motherName: '',
+            birthDate: s.dateOfBirth ? String(s.dateOfBirth).split('T')[0] : '',
+            age: '',
+            nationalCode: '',
+            aboutMe: s.address || '',
+            status: s.status === 'active' ? 'approved' : 'pending',
+            isBest: false,
+            circle: ''
+        }));
+        refreshTable();
+        updateStatistics();
+    } catch (error) {
+        console.error(error);
+        showAlert('خطا در بارگذاری داده‌ها', 'error');
+    }
+}
 
 // Initialize DataTable
 function initializeDataTable() {
-    const { SweetAlert: SweetAlert1, students: students1 } = api_services
-    students = students1
+    const { SweetAlert: SweetAlert1 } = api_services
     SweetAlert = SweetAlert1
 
     $('#studentsTable').DataTable({
@@ -242,13 +268,12 @@ window.deleteStudent = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            // اگر API آماده باشد، از آن استفاده کنید
-            // await API.deleteStudent(id);
+            // حذف از سرور
+            const { API } = (await import('./api-servies-admin.js')).api_services;
+            await API.deleteStudent(id);
 
-            // فعلاً از داده‌های محلی استفاده می‌کنیم
-            students = students.filter(s => s.id !== id);
-            refreshTable();
-            updateStatistics();
+            // Reload data from server after deletion
+            await loadStudentsFromServer();
 
             showAlert('دانش آموز با موفقیت حذف شد', 'success');
         } catch (error) {
@@ -424,4 +449,4 @@ function setupAdvancedSearch() {
 
 let currentEditId = null;
 
-export const table_users = { showAlert, refreshTable, updateCircleSummary, updateTableSummary, updateStatistics, initializeDataTable, updateBulkStudentsList, setupAdvancedSearch, currentEditId }
+export const table_users = { showAlert, refreshTable, updateCircleSummary, updateTableSummary, updateStatistics, initializeDataTable, updateBulkStudentsList, setupAdvancedSearch, currentEditId, loadStudentsFromServer }

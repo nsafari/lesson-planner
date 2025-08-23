@@ -104,4 +104,11 @@ window.playAudio = function(url) {
 };
 
 // شروع برنامه
-document.addEventListener('DOMContentLoaded', initializeApp);
+document.addEventListener('DOMContentLoaded', async function() {
+    await initializeApp();
+    
+    // Load student submissions on page load
+    if (typeof loadStudentSubmissions === 'function') {
+        loadStudentSubmissions(1);
+    }
+});

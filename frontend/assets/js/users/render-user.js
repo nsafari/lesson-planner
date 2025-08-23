@@ -279,6 +279,122 @@ window.submitDailyWork = async function (assignmentId) {
     }
 };
 
+// نمایش ارسال‌های دانش‌آموز
+window.loadStudentSubmissions = async function (studentId) {
+    try {
+        const submissions = await ApiService.getStudentSubmissionsWithDetails(studentId);
+        displaySubmissions(submissions);
+    } catch (error) {
+        console.error('Error loading submissions:', error);
+        // نمایش پیام خطا به کاربر
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'خطا',
+                text: 'خطا در بارگذاری ارسال‌ها',
+                icon: 'error',
+                confirmButtonText: 'باشه'
+            });
+        } else {
+            alert('خطا در بارگذاری ارسال‌ها');
+        }
+    }
+};
+
+// نمایش ارسال‌ها در UI
+function displaySubmissions(submissions) {
+    const submissionsContainer = document.getElementById('submissionsContainer');
+    if (!submissionsContainer) return;
+
+    if (submissions.length === 0) {
+        submissionsContainer.innerHTML = `
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                هنوز هیچ ارسالی ثبت نشده است.
+            </div>
+        `;
+        return;
+    }
+
+    let html = '<div class="row">';
+    
+    submissions.forEach((submission, index) => {
+        const submissionDate = new Date(submission.submissionDate).toLocaleDateString('fa-IR');
+        const assignmentTitle = submission.assignment?.title || `تکلیف ${submission.assignmentId}`;
+        
+        html += `
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-file-audio me-2"></i>
+                            ${assignmentTitle}
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <small class="text-muted">تاریخ ارسال:</small>
+                            <div>${submissionDate}</div>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">نمره روزانه:</small>
+                            <div class="badge bg-success">${submission.dailyScore || 0}</div>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">وضعیت:</small>
+                            <div class="badge bg-${submission.status === 'submitted' ? 'primary' : 'secondary'}">
+                                ${submission.status === 'submitted' ? 'ارسال شده' : submission.status}
+                            </div>
+                        </div>
+                        ${submission.notes ? `
+                            <div class="mb-2">
+                                <small class="text-muted">یادداشت:</small>
+                                <div class="small">${submission.notes}</div>
+                            </div>
+                        ` : ''}
+                        ${submission.audioFileUrl ? `
+                            <div class="mt-3">
+                                <button class="btn btn-sm btn-outline-primary" onclick="playSubmissionAudio('${submission.audioFileUrl}', ${index})">
+                                    <i class="fas fa-play me-1"></i>
+                                    پخش صوت
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    submissionsContainer.innerHTML = html;
+}
+
+// پخش صوت ارسال
+window.playSubmissionAudio = function (audioUrl, submissionIndex) {
+    try {
+        const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:3000${audioUrl}`;
+        const audio = new Audio(fullUrl);
+        
+        audio.play().then(() => {
+            console.log('Audio started playing');
+        }).catch(error => {
+            console.error('Error playing audio:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'خطا',
+                    text: 'خطا در پخش فایل صوتی',
+                    icon: 'error',
+                    confirmButtonText: 'باشه'
+                });
+            } else {
+                alert('خطا در پخش فایل صوتی');
+            }
+        });
+    } catch (error) {
+        console.error('Error creating audio element:', error);
+    }
+};
+
 ApiService.getUserData()
 
 // تابع برای نمایش مدال با اطلاعات

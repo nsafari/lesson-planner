@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private studentService: StudentService,
+    @Inject(forwardRef(() => StudentService)) private studentService: StudentService,
   ) {}
 
   async createUser(username: string, password: string, imageUrl: string | null = null, studentId: number | null = null): Promise<void> {
