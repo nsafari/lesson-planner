@@ -46,10 +46,10 @@ export class AppModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // ایجاد کاربر پیش‌فرض برای تست
+    // ایجاد کاربر پیش‌فرض برای تست (مدیر)
     try {
-      await this.userService.createUser('test', 'password', null);
-      console.log('✅ کاربر پیش‌فرض ایجاد شد');
+      await this.userService.createUser('test', 'password', null, null, 'admin');
+      console.log('✅ کاربر پیش‌فرض (مدیر) ایجاد شد');
     } catch (error) {
       console.error('⚠️ خطا در ایجاد کاربر پیش‌فرض:', error?.message ?? error);
     }

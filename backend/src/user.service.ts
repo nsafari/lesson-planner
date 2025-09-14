@@ -13,7 +13,7 @@ export class UserService {
     @Inject(forwardRef(() => StudentService)) private studentService: StudentService,
   ) {}
 
-  async createUser(username: string, password: string, imageUrl: string | null = null, studentId: number | null = null): Promise<void> {
+  async createUser(username: string, password: string, imageUrl: string | null = null, studentId: number | null = null, userType: string = 'student'): Promise<void> {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = this.userRepository.create({
       username,
@@ -21,7 +21,7 @@ export class UserService {
       imageUrl,
       studentId,
       approvalStatus: 'approved', // کاربران موجود تایید شده هستند
-      userType: 'student',
+      userType: userType,
     });
     await this.userRepository.save(user);
   }
