@@ -267,13 +267,19 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+    console.log('Admin Dashboard - Current User:', this.currentUser);
+    console.log('Admin Dashboard - isAdmin():', this.authService.isAdmin());
+    console.log('Admin Dashboard - isStudent():', this.authService.isStudent());
+    
     if (!this.currentUser) {
+      console.log('Admin Dashboard - No current user, redirecting to login');
       this.router.navigate(['/auth/login']);
       return;
     }
 
     // Only admins can access this dashboard
     if (!this.authService.isAdmin()) {
+      console.log('Admin Dashboard - User is not admin, redirecting');
       // If user is a student, redirect to student dashboard
       if (this.authService.isStudent()) {
         this.router.navigate(['/dashboard']);
@@ -283,6 +289,7 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
 
+    console.log('Admin Dashboard - User is admin, loading data');
     this.loadStatistics();
     this.loadRecentActivity();
   }
