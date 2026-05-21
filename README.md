@@ -2,6 +2,8 @@
 
 این مخزن شامل چند بخش اصلی است: بک‌اند NestJS، بک‌اند ASP.NET Core، فرانت‌اند Angular، و فرانت‌اند کلاسیک. هدف سیستم مدیریت دانش‌آموز، درس، تکلیف روزانه و ارسال روزانه است، با نمودارهای پیشرفت هر دو هفته.
 
+> ⚠️ **محدودیت مهم**: فرانت‌اند Angular صرفاً با بک‌اند NestJS (پورت 3000) کار می‌کند. بک‌اند ASP.NET Core یک پورت جداگانه با API مشابه اما مستقل از فرانت‌اند Angular است.
+
 ## 🎯 هدف پروژه
 
 سیستم درس‌پلنر برای مدیریت فرآیند آموزش روزانه دانش‌آموزان طراحی شده است:
@@ -87,11 +89,12 @@ lesson-planner/
 cd backend-dotnet/LessonPlanner.Api
 dotnet run
 ```
-- سرور روی `http://localhost:5000` (پیش‌فرض) اجرا می‌شود
+- سرور روی `http://localhost:5253` اجرا می‌شود (پورت در `Properties/launchSettings.json`)
 - پایگاه‌داده SQLite `lesson-planner.db` با `EnsureCreated()` ساخته می‌شود
 - کاربر ادمین `test` / `password` و داده‌های نمونه به‌صورت خودکار ایجاد می‌شوند
 - CORS کاملاً باز است (`AllowAnyOrigin`)
-- API کاملاً مشابه نسخه NestJS است
+- API کاملاً مشابه نسخه NestJS است (همان endpointها، همان رفتار)
+- **محدودیت**: فرانت‌اند Angular به صورت پیش‌فرض به `http://localhost:3000` متصل می‌شود — برای استفاده از این بک‌اند باید URL را در `frontend-angular/src/app/core/services/api.service.ts` و `auth.service.ts` به `http://localhost:5253` تغییر دهید
 
 ### اجرای فرانت‌اند Angular (`frontend-angular/`)
 ```bash
@@ -100,7 +103,9 @@ npm install
 npm start
 ```
 - سرور روی `http://localhost:4200` اجرا می‌شود
-- API base به صورت پیش‌فرض `http://localhost:3000` است (NestJS)
+- **محدودیت مهم**: API base در سراسر پروژه به صورت hardcoded روی `http://localhost:3000` تنظیم شده است (فایل‌های `api.service.ts`، `auth.service.ts`، `dashboard.component.ts`، و نسخه‌های JS قدیمی در `assets/js/`)
+- برای تغییر بک‌اند مقصد، باید URL را در همه این فایل‌ها به‌روزرسانی کنید
+- احراز هویت مبتنی بر localStorage با توکن ساختگی (`dummy-token`) است — توکن واقعی JWT صادر نمی‌شود
 
 ### اجرای فرانت‌اند کلاسیک (`frontend/`)
 فایل‌های HTML را با یک سرور استاتیک اجرا کنید:
