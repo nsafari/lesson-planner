@@ -1,8 +1,6 @@
 # راهنمای پروژه درس‌پلنر (Lesson Planner)
 
-این مخزن شامل چند بخش اصلی است: بک‌اند NestJS، بک‌اند ASP.NET Core، فرانت‌اند Angular، و فرانت‌اند کلاسیک. هدف سیستم مدیریت دانش‌آموز، درس، تکلیف روزانه و ارسال روزانه است، با نمودارهای پیشرفت هر دو هفته.
-
-> ⚠️ **محدودیت مهم**: فرانت‌اند Angular صرفاً با بک‌اند NestJS (پورت 3000) کار می‌کند. بک‌اند ASP.NET Core یک پورت جداگانه با API مشابه اما مستقل از فرانت‌اند Angular است.
+این مخزن شامل دو بخش اصلی است: بک‌اند ASP.NET Core و فرانت‌اند Angular. هدف سیستم مدیریت دانش‌آموز، درس، تکلیف روزانه و ارسال روزانه است، با نمودارهای پیشرفت هر دو هفته.
 
 ## 🎯 هدف پروژه
 
@@ -16,18 +14,6 @@
 
 ```
 lesson-planner/
-├─ backend/                # سرویس بک‌اند NestJS (TypeORM + SQLite)
-│  ├─ src/
-│  │  ├─ entities/         # مدل‌های پایگاه‌داده (TypeORM)
-│  │  ├─ services/         # منطق تجاری
-│  │  ├─ controllers/      # APIهای REST
-│  │  ├─ seeders/          # ایجاد داده‌های نمونه (Seeder)
-│  │  ├─ app.module.ts     # پیکربندی اصلی ماژول
-│  │  ├─ main.ts           # راه‌اندازی برنامه + CORS
-│  │  └─ ...
-│  ├─ API_ENDPOINTS.md     # مستندات API
-│  └─ README.md            # راهنمای اختصاصی بک‌اند
-│
 ├─ backend-dotnet/         # سرویس بک‌اند ASP.NET Core 8 (EF Core + SQLite)
 │  └─ LessonPlanner.Api/
 │     ├─ Models/           # موجودیت‌های EF Core
@@ -38,23 +24,12 @@ lesson-planner/
 │     ├─ Seeders/          # داده‌های نمونه
 │     └─ Program.cs        # راه‌اندازی برنامه
 │
-├─ frontend-angular/       # فرانت‌اند Angular 17 (standalone)
-│  ├─ src/app/
-│  │  ├─ core/             # Models, Services, Guards, Interceptors
-│  │  ├─ features/         # auth, dashboard, admin
-│  │  └─ ...
-│  └─ README.md
-│
-└─ frontend/               # فرانت‌اند کلاسیک (HTML/CSS/JS ساده)
-   ├─ assets/
-   │  ├─ js/
-   │  │  ├─ api/api.service.js        # سرویس ارتباط با بک‌اند
-   │  │  ├─ users/render-user.js      # رندر منو، تایم‌لاین و نمودار
-   │  │  └─ index.js                  # مقداردهی اولیه برنامه
-   │  ├─ styles/                      # فایل‌های CSS
-   │  └─ vendor/                      # کتابخانه‌های جانبی (Highcharts، Bootstrap، ...)
-   ├─ users/index.html                # صفحه داشبورد کاربر
-   └─ admin/index.html                # صفحه مدیریت
+└─ frontend-angular/       # فرانت‌اند Angular 17 (standalone)
+   ├─ src/app/
+   │  ├─ core/             # Models, Services, Guards, Interceptors
+   │  ├─ features/         # auth, dashboard, admin
+   │  └─ ...
+   └─ README.md
 ```
 
 ## 🛠️ نحوه اجرا (توسعه)
@@ -62,27 +37,8 @@ lesson-planner/
 ### پیش‌نیازها
 - Node.js 18+
 - npm 9+
-- .NET 8 SDK (برای `backend-dotnet`)
+- .NET 8 SDK
 - سیستم‌عامل سازگار (Linux/WSL توصیه می‌شود)
-
-### اجرای بک‌اند NestJS (`backend/`)
-1. نصب وابستگی‌ها:
-   ```bash
-   cd backend
-   npm install
-   ```
-2. اجرای توسعه:
-   ```bash
-   npm run start:dev
-   ```
-3. ویژگی‌ها هنگام راه‌اندازی:
-   - CORS فعال است (ارتباط آزاد از فرانت‌اند روی پورت دیگر)
-   - پایگاه‌داده SQLite (`lesson-planner.db`) ساخته می‌شود
-   - جداول به‌صورت خودکار همگام‌سازی می‌شوند (`synchronize: true`)
-   - کاربر پیش‌فرض `test` با رمز `password` ساخته می‌شود
-   - داده‌های نمونه به‌صورت خودکار Seed می‌شوند
-
-سرور به طور پیش‌فرض روی `http://localhost:3000` اجرا می‌شود.
 
 ### اجرای بک‌اند ASP.NET Core (`backend-dotnet/`)
 ```bash
@@ -94,7 +50,7 @@ dotnet run
 - کاربر ادمین `test` / `password` و داده‌های نمونه به‌صورت خودکار ایجاد می‌شوند
 - CORS کاملاً باز است (`AllowAnyOrigin`)
 - API کاملاً مشابه نسخه NestJS است (همان endpointها، همان رفتار)
-- **محدودیت**: فرانت‌اند Angular به صورت پیش‌فرض به `http://localhost:3000` متصل می‌شود — برای استفاده از این بک‌اند باید URL را در `frontend-angular/src/app/core/services/api.service.ts` و `auth.service.ts` به `http://localhost:5253` تغییر دهید
+- **محدودیت**: فرانت‌اند Angular به صورت پیش‌فرض به `http://localhost:3000` متصل می‌شود — باید URL را در `frontend-angular/src/app/core/services/api.service.ts` و `auth.service.ts` به `http://localhost:5253` تغییر دهید
 
 ### اجرای فرانت‌اند Angular (`frontend-angular/`)
 ```bash
@@ -106,15 +62,6 @@ npm start
 - **محدودیت مهم**: API base در سراسر پروژه به صورت hardcoded روی `http://localhost:3000` تنظیم شده است (فایل‌های `api.service.ts`، `auth.service.ts`، `dashboard.component.ts`، و نسخه‌های JS قدیمی در `assets/js/`)
 - برای تغییر بک‌اند مقصد، باید URL را در همه این فایل‌ها به‌روزرسانی کنید
 - احراز هویت مبتنی بر localStorage با توکن ساختگی (`dummy-token`) است — توکن واقعی JWT صادر نمی‌شود
-
-### اجرای فرانت‌اند کلاسیک (`frontend/`)
-فایل‌های HTML را با یک سرور استاتیک اجرا کنید:
-```bash
-npx http-server frontend -p 8080 -c-1
-```
-صفحه اصلی کاربر: `frontend/users/index.html`
-
-توجه: به دلیل فعال بودن CORS در بک‌اند، درخواست‌ها از هر پورتی مجاز هستند.
 
 ## 🧪 تست سیستم
 
@@ -129,11 +76,12 @@ npx http-server frontend -p 8080 -c-1
 | **مدیر** | `test` | `password` | مدیر سیستم |
 
 ### مراحل تست
-1. **راه‌اندازی**: `npm run start:dev` در پوشه backend
-2. **تست ورود**: از کاربران نمونه استفاده کنید
-3. **تست ثبت‌نام**: کاربر جدید ثبت‌نام کنید
-4. **تست تایید**: به عنوان مدیر وارد شوید و کاربر را تایید کنید
-5. **تست تکالیف**: به عنوان دانش‌آموز وارد شوید و تکالیف را مشاهده کنید
+1. **راه‌اندازی بک‌اند**: `dotnet run` در پوشه `backend-dotnet/LessonPlanner.Api`
+2. **راه‌اندازی فرانت‌اند**: `npm start` در پوشه `frontend-angular`
+3. **تست ورود**: از کاربران نمونه استفاده کنید
+4. **تست ثبت‌نام**: کاربر جدید ثبت‌نام کنید
+5. **تست تایید**: به عنوان مدیر وارد شوید و کاربر را تایید کنید
+6. **تست تکالیف**: به عنوان دانش‌آموز وارد شوید و تکالیف را مشاهده کنید
 
 ## 📊 مدل داده
 
@@ -153,7 +101,7 @@ npx http-server frontend -p 8080 -c-1
 
 ## 🔌 نقاط انتهایی مهم (API)
 
-> تمام endpointها در هر دو بک‌اند (NestJS و ASP.NET Core) یکسان هستند.
+> تمام endpointها در بک‌اند ASP.NET Core پیاده‌سازی شده‌اند.
 
 ### 🔐 احراز هویت
 - `POST /auth/signin` - ورود کاربر (بررسی وضعیت تایید)
@@ -179,21 +127,13 @@ npx http-server frontend -p 8080 -c-1
 - `POST /admin/assignments/:assignmentId/attachments` - آپلود فایل ضمیمه
 - `GET /admin/statistics` - آمار سیستم
 
-**جزئیات کامل‌تر در `backend/API_ENDPOINTS.md` موجود است.**
-
 ## 📚 مستندات تکمیلی
 
 ### فایل‌های راهنما
-- `backend/API_ENDPOINTS.md` - مستندات کامل API
-- `backend/SIGNUP_APPROVAL_WORKFLOW.md` - فرآیند ثبت‌نام و تایید
-- `backend/USER_STUDENT_RELATIONSHIP.md` - رابطه کاربر و دانش‌آموز
-- `backend/ADMIN_API_EXAMPLES.md` - مثال‌های API مدیریت
-- `backend/STUDENT_FILE_UPLOAD_GUIDE.md` - راهنمای آپلود فایل
 - `AGENTS.md` - راهنمای ساختار پروژه و معماری سیستم
 
 ### نکات امنیتی
 - تمام APIها نیاز به احراز هویت دارند (به جز auth)
 - کاربران pending نمی‌توانند وارد شوند
 - فایل‌ها محدودیت نوع و حجم دارند
-- دسترسی‌ها بر اساس نوع کاربر کنترل می‌شود
-- AuthGuard در NestJS عملاً no-op است (توکن واقعی صادر نمی‌شود) 
+- دسترسی‌ها بر اساس نوع کاربر کنترل می‌شود 
