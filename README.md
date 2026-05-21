@@ -1,6 +1,6 @@
 # راهنمای پروژه درس‌پلنر (Lesson Planner)
 
-این مخزن شامل دو بخش اصلی است: بک‌اند (NestJS + TypeORM + SQLite) و فرانت‌اند (HTML/CSS/JS ساده). هدف سیستم مدیریت دانش‌آموز، درس، تکلیف روزانه و ارسال روزانه است، با نمودارهای پیشرفت هر دو هفته.
+این مخزن شامل چند بخش اصلی است: بک‌اند NestJS، بک‌اند ASP.NET Core، فرانت‌اند Angular، و فرانت‌اند کلاسیک. هدف سیستم مدیریت دانش‌آموز، درس، تکلیف روزانه و ارسال روزانه است، با نمودارهای پیشرفت هر دو هفته.
 
 ## 🎯 هدف پروژه
 
@@ -14,19 +14,36 @@
 
 ```
 lesson-planner/
-├─ backend/            # سرویس بک‌اند با NestJS
+├─ backend/                # سرویس بک‌اند NestJS (TypeORM + SQLite)
 │  ├─ src/
-│  │  ├─ entities/     # مدل‌های پایگاه‌داده (TypeORM)
-│  │  ├─ services/     # منطق تجاری
-│  │  ├─ controllers/  # APIهای REST
-│  │  ├─ seeders/      # ایجاد داده‌های نمونه (Seeder)
-│  │  ├─ app.module.ts # پیکربندی اصلی ماژول
-│  │  ├─ main.ts       # راه‌اندازی برنامه + CORS
+│  │  ├─ entities/         # مدل‌های پایگاه‌داده (TypeORM)
+│  │  ├─ services/         # منطق تجاری
+│  │  ├─ controllers/      # APIهای REST
+│  │  ├─ seeders/          # ایجاد داده‌های نمونه (Seeder)
+│  │  ├─ app.module.ts     # پیکربندی اصلی ماژول
+│  │  ├─ main.ts           # راه‌اندازی برنامه + CORS
 │  │  └─ ...
-│  ├─ API_ENDPOINTS.md # مستندات API
-│  └─ README.md        # راهنمای اختصاصی بک‌اند
+│  ├─ API_ENDPOINTS.md     # مستندات API
+│  └─ README.md            # راهنمای اختصاصی بک‌اند
 │
-└─ frontend/
+├─ backend-dotnet/         # سرویس بک‌اند ASP.NET Core 8 (EF Core + SQLite)
+│  └─ LessonPlanner.Api/
+│     ├─ Models/           # موجودیت‌های EF Core
+│     ├─ Data/             # AppDbContext
+│     ├─ DTOs/             # مدل‌های درخواست/پاسخ
+│     ├─ Services/         # منطق تجاری (interface + implementation)
+│     ├─ Controllers/      # ۵ کنترلر (auth, student, course, admin, seeder)
+│     ├─ Seeders/          # داده‌های نمونه
+│     └─ Program.cs        # راه‌اندازی برنامه
+│
+├─ frontend-angular/       # فرانت‌اند Angular 17 (standalone)
+│  ├─ src/app/
+│  │  ├─ core/             # Models, Services, Guards, Interceptors
+│  │  ├─ features/         # auth, dashboard, admin
+│  │  └─ ...
+│  └─ README.md
+│
+└─ frontend/               # فرانت‌اند کلاسیک (HTML/CSS/JS ساده)
    ├─ assets/
    │  ├─ js/
    │  │  ├─ api/api.service.js        # سرویس ارتباط با بک‌اند
@@ -35,65 +52,7 @@ lesson-planner/
    │  ├─ styles/                      # فایل‌های CSS
    │  └─ vendor/                      # کتابخانه‌های جانبی (Highcharts، Bootstrap، ...)
    ├─ users/index.html                # صفحه داشبورد کاربر
-   └─ admin/index.html                # (در صورت استفاده) صفحه مدیریت
-```
-
-## 👥 فرآیند کار برای کاراموزان
-
-### 🔄 فرآیند کامل سیستم
-
-#### 1. **ثبت‌نام کاربر جدید**
-کاربر جدید درخواست ثبت‌نام می‌دهد:
-```bash
-POST /auth/register
-{
-  "username": "newstudent",
-  "password": "password123",
-  "firstName": "علی",
-  "lastName": "احمدی",
-  "email": "ali@example.com",
-  "phoneNumber": "09123456789"
-}
-```
-→ کاربر با وضعیت `pending` ایجاد می‌شود
-
-#### 2. **تایید توسط مدیر**
-مدیر سیستم کاربر را تایید می‌کند:
-```bash
-POST /admin/users/5/approve
-{
-  "firstName": "علی",
-  "lastName": "احمدی",
-  "email": "ali@example.com",
-  "phoneNumber": "09123456789",
-  "studentId": "ST004",
-  "courseIds": [1, 2]
-}
-```
-→ دانش‌آموز ایجاد و در دوره‌ها ثبت‌نام می‌شود
-
-#### 3. **ورود کاربر**
-کاربر تایید شده وارد سیستم می‌شود:
-```bash
-POST /auth/login
-{
-  "username": "newstudent",
-  "password": "password123"
-}
-```
-→ اطلاعات دانش‌آموز و دسترسی به تکالیف
-
-#### 4. **مشاهده و ارسال تکالیف**
-دانش‌آموز تکالیف را مشاهده و ارسال می‌کند:
-```bash
-GET /students/4/progress          # مشاهده پیشرفت
-POST /students/4/assignments/1/submit  # ارسال تکلیف با فایل
-```
-
-### 📊 جریان داده (Data Flow)
-
-```
-User Signup → Pending Approval → Admin Review → Student Creation → Course Enrollment → Assignment Access → File Submission → Progress Tracking
+   └─ admin/index.html                # صفحه مدیریت
 ```
 
 ## 🛠️ نحوه اجرا (توسعه)
@@ -101,9 +60,10 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 ### پیش‌نیازها
 - Node.js 18+
 - npm 9+
+- .NET 8 SDK (برای `backend-dotnet`)
 - سیستم‌عامل سازگار (Linux/WSL توصیه می‌شود)
 
-### اجرای بک‌اند
+### اجرای بک‌اند NestJS (`backend/`)
 1. نصب وابستگی‌ها:
    ```bash
    cd backend
@@ -115,24 +75,41 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
    ```
 3. ویژگی‌ها هنگام راه‌اندازی:
    - CORS فعال است (ارتباط آزاد از فرانت‌اند روی پورت دیگر)
-   - پایگاه‌داده SQLite با نام `lesson-planner.db` در مسیر `backend/` ساخته می‌شود
-   - جداول به‌صورت خودکار همگام‌سازی می‌شوند (synchronize: true)
+   - پایگاه‌داده SQLite (`lesson-planner.db`) ساخته می‌شود
+   - جداول به‌صورت خودکار همگام‌سازی می‌شوند (`synchronize: true`)
    - کاربر پیش‌فرض `test` با رمز `password` ساخته می‌شود
-   - داده‌های نمونه (دانش‌آموز، دوره، ۳۶ تکلیف روزانه، ضمیمه‌های صوتی روز اول، ارسال‌های نمونه) به‌صورت خودکار Seed می‌شوند
+   - داده‌های نمونه به‌صورت خودکار Seed می‌شوند
 
-سرور به طور پیش‌فرض روی `http://localhost:3000` اجرا خواهد شد.
+سرور به طور پیش‌فرض روی `http://localhost:3000` اجرا می‌شود.
 
-### اجرای فرانت‌اند
-1. کافی است فایل‌های HTML را با یک سرور استاتیک اجرا کنید (یا مستقیم در مرورگر باز کنید). پیشنهاد:
-   - با VSCode افزونه Live Server
-   - یا با یک سرور ساده Node:
-     ```bash
-     # از ریشه مخزن
-     npx http-server frontend -p 8080 -c-1
-     ```
-2. صفحه اصلی کاربر: `frontend/users/index.html`
+### اجرای بک‌اند ASP.NET Core (`backend-dotnet/`)
+```bash
+cd backend-dotnet/LessonPlanner.Api
+dotnet run
+```
+- سرور روی `http://localhost:5000` (پیش‌فرض) اجرا می‌شود
+- پایگاه‌داده SQLite `lesson-planner.db` با `EnsureCreated()` ساخته می‌شود
+- کاربر ادمین `test` / `password` و داده‌های نمونه به‌صورت خودکار ایجاد می‌شوند
+- CORS کاملاً باز است (`AllowAnyOrigin`)
+- API کاملاً مشابه نسخه NestJS است
 
-توجه: اگر فرانت‌اند روی پورت دیگری اجرا شود (مثلاً 8080)، به دلیل فعال بودن CORS در بک‌اند، درخواست‌ها مجاز هستند.
+### اجرای فرانت‌اند Angular (`frontend-angular/`)
+```bash
+cd frontend-angular
+npm install
+npm start
+```
+- سرور روی `http://localhost:4200` اجرا می‌شود
+- API base به صورت پیش‌فرض `http://localhost:3000` است (NestJS)
+
+### اجرای فرانت‌اند کلاسیک (`frontend/`)
+فایل‌های HTML را با یک سرور استاتیک اجرا کنید:
+```bash
+npx http-server frontend -p 8080 -c-1
+```
+صفحه اصلی کاربر: `frontend/users/index.html`
+
+توجه: به دلیل فعال بودن CORS در بک‌اند، درخواست‌ها از هر پورتی مجاز هستند.
 
 ## 🧪 تست سیستم
 
@@ -153,33 +130,7 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 4. **تست تایید**: به عنوان مدیر وارد شوید و کاربر را تایید کنید
 5. **تست تکالیف**: به عنوان دانش‌آموز وارد شوید و تکالیف را مشاهده کنید
 
-## 🔗 نحوه ارتباط بک‌اند و فرانت‌اند
-
-### API Service
-فرانت‌اند از طریق `ApiService` با آدرس پایه `http://localhost:3000` به بک‌اند متصل می‌شود:
-- **فایل**: `frontend/assets/js/api/api.service.js`
-- **متدهای کلیدی**:
-  - `getActiveCourses()` - دریافت دوره‌های فعال
-  - `getCourseAssignments(courseId)` - دریافت تکالیف روزانه هر دوره (به همراه ضمیمه‌ها)
-  - `getStudentSubmissions(studentId)` - دریافت ارسال‌های دانش‌آموز
-  - `getAssignmentProgress(studentId, assignmentId)` - دریافت پیشرفت در یک تکلیف روزانه
-  - `submitDailyWork(studentId, assignmentId, data)` - ارسال کار روزانه
-
-### بخش‌های اصلی UI
-- **`render-user.js`**: 
-  - منو دوره‌ها
-  - تایم‌لاین تکالیف روزانه 
-  - نمایش آیکون صوت برای ضمیمه‌ها
-  - مدال جزئیات تکلیف
-  - دکمه ثبت ارسال
-- **نمودار**: نمایش «میانگین نمرات هر دو هفته» بر اساس تجمیع ۱۲ روزه
-
-### احراز هویت
-- **توکن**: تمام درخواست‌ها نیاز به توکن احراز هویت دارند
-- **ذخیره**: توکن در localStorage ذخیره می‌شود
-- **نوع کاربر**: سیستم بین دانش‌آموز و مدیر تمایز قائل می‌شود
-
-## 📊 مدل داده (خلاصه)
+## 📊 مدل داده
 
 ### موجودیت‌های اصلی
 - **Student** (دانش‌آموز) - اطلاعات شخصی و تحصیلی
@@ -190,12 +141,6 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 - **StudentCourse** (ثبت‌نام دانش‌آموز در درس) - رابطه دانش‌آموز-دوره
 - **User** (کاربر) - احراز هویت و تایید
 
-### روابط مهم
-- هر **Course** شامل چند **Assignment** (روزانه)
-- هر **Assignment** می‌تواند چند **Attachment** داشته باشد
-- هر **Student** برای هر **Assignment** می‌تواند یک **Submission** داشته باشد
-- هر **User** می‌تواند یک **Student** باشد (پس از تایید)
-
 ### وضعیت‌های کاربر
 - **pending**: در انتظار تایید مدیر
 - **approved**: تایید شده و دانش‌آموز ایجاد شده
@@ -203,16 +148,16 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 
 ## 🔌 نقاط انتهایی مهم (API)
 
+> تمام endpointها در هر دو بک‌اند (NestJS و ASP.NET Core) یکسان هستند.
+
 ### 🔐 احراز هویت
-- `POST /auth/login` - ورود کاربر (بررسی وضعیت تایید)
-- `POST /auth/register` - ثبت‌نام کاربر جدید (وضعیت pending)
+- `POST /auth/signin` - ورود کاربر (بررسی وضعیت تایید)
+- `POST /auth/signup` - ثبت‌نام کاربر جدید (وضعیت pending)
 
 ### 👨‍🎓 دانش‌آموزان
 - `GET /students/:id/progress` - پیشرفت دانش‌آموز
-- `GET /students/:id/assignments/:assignmentId/progress` - پیشرفت در تکلیف خاص
-- `GET /students/:id/submissions` - لیست ارسال‌ها
+- `GET /students/me/profile` - پروفایل دانش‌آموز (username در body)
 - `POST /students/:id/assignments/:assignmentId/submit` - ارسال کار روزانه (با آپلود فایل)
-- `POST /students/:id/submissions/:submissionId/upload` - آپلود فایل برای ارسال موجود
 
 ### 📚 دوره‌ها
 - `GET /courses` - همه دوره‌ها
@@ -225,45 +170,11 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 - `GET /admin/users/pending` - کاربران در انتظار تایید
 - `POST /admin/users/:userId/approve` - تایید کاربر و ایجاد دانش‌آموز
 - `POST /admin/users/:userId/reject` - رد کردن کاربر
+- `POST /admin/courses/:courseId/assignments/daily-series` - ایجاد سری تکالیف
 - `POST /admin/assignments/:assignmentId/attachments` - آپلود فایل ضمیمه
 - `GET /admin/statistics` - آمار سیستم
 
 **جزئیات کامل‌تر در `backend/API_ENDPOINTS.md` موجود است.**
-
-## 💡 نکات توسعه
-
-### 🔄 مدیریت داده‌ها
-- **پاک‌سازی**: فایل `backend/lesson-planner.db` را حذف کنید و سرویس را مجدد اجرا کنید
-- **Seed خودکار**: داده‌های نمونه به‌صورت خودکار ایجاد می‌شوند
-- **لاگ‌ها**: در حالت توسعه فعال هستند (SQL و رویدادها)
-
-### 🛠️ توسعه Frontend
-- **API Service**: از `frontend/assets/js/api/api.service.js` استفاده کنید
-- **احراز هویت**: توکن را در localStorage ذخیره کنید
-- **فایل‌ها**: آپلود فایل با FormData انجام می‌شود
-
-### 🔧 توسعه Backend
-- **Entities**: در `backend/src/entities/` تعریف می‌شوند
-- **Services**: منطق تجاری در `backend/src/services/`
-- **Controllers**: API endpoints در `backend/src/controllers/`
-
-## 🚨 مشکلات رایج
-
-### فرانت‌اند داده نشان نمی‌دهد
-- ✅ بک‌اند روی `http://localhost:3000` اجرا شود
-- ✅ خطاهای کنسول مرورگر بررسی شود
-- ✅ فایل پایگاه‌داده و جداول بررسی شود
-- ✅ CORS فعال باشد
-
-### خطاهای احراز هویت
-- ✅ توکن معتبر استفاده شود
-- ✅ وضعیت تایید کاربر بررسی شود
-- ✅ نوع کاربر (student/admin) صحیح باشد
-
-### خطاهای آپلود فایل
-- ✅ نوع فایل مجاز باشد (MP3, PDF, DOC, etc.)
-- ✅ حجم فایل کمتر از 10MB باشد
-- ✅ پوشه‌های uploads وجود داشته باشد
 
 ## 📚 مستندات تکمیلی
 
@@ -273,9 +184,11 @@ User Signup → Pending Approval → Admin Review → Student Creation → Cours
 - `backend/USER_STUDENT_RELATIONSHIP.md` - رابطه کاربر و دانش‌آموز
 - `backend/ADMIN_API_EXAMPLES.md` - مثال‌های API مدیریت
 - `backend/STUDENT_FILE_UPLOAD_GUIDE.md` - راهنمای آپلود فایل
+- `AGENTS.md` - راهنمای ساختار پروژه و معماری سیستم
 
 ### نکات امنیتی
-- تمام APIها نیاز به احراز هویت دارند
+- تمام APIها نیاز به احراز هویت دارند (به جز auth)
 - کاربران pending نمی‌توانند وارد شوند
 - فایل‌ها محدودیت نوع و حجم دارند
-- دسترسی‌ها بر اساس نوع کاربر کنترل می‌شود 
+- دسترسی‌ها بر اساس نوع کاربر کنترل می‌شود
+- AuthGuard در NestJS عملاً no-op است (توکن واقعی صادر نمی‌شود) 
