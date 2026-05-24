@@ -13,13 +13,17 @@ public class UserService : IUserService
         _db = db;
     }
 
-    public async Task CreateUserAsync(string username, string password, string? imageUrl, int? studentId, string userType)
+    public async Task CreateUserAsync(string username, string password, string? imageUrl, int? studentId, string userType, string? firstName = null, string? lastName = null, string? email = null, string? phoneNumber = null)
     {
         var hash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = new User
         {
             Username = username,
             PasswordHash = hash,
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            PhoneNumber = phoneNumber,
             ImageUrl = imageUrl,
             StudentId = studentId,
             ApprovalStatus = "approved",
@@ -31,13 +35,17 @@ public class UserService : IUserService
         await _db.SaveChangesAsync();
     }
 
-    public async Task CreatePendingUserAsync(string username, string password, string? imageUrl)
+    public async Task CreatePendingUserAsync(string username, string password, string? imageUrl, string? firstName = null, string? lastName = null, string? email = null, string? phoneNumber = null)
     {
         var hash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = new User
         {
             Username = username,
             PasswordHash = hash,
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            PhoneNumber = phoneNumber,
             ImageUrl = imageUrl,
             ApprovalStatus = "pending",
             UserType = "student",

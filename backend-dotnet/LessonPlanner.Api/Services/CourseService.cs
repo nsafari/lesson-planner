@@ -209,7 +209,10 @@ public class CourseService : ICourseService
             TotalCourses = await _db.Courses.CountAsync(),
             TotalAssignments = await _db.Assignments.CountAsync(),
             TotalAttachments = await _db.AssignmentAttachments.CountAsync(),
-            ActiveCourses = await _db.Courses.CountAsync(c => c.Status == "active")
+            ActiveCourses = await _db.Courses.CountAsync(c => c.Status == "active"),
+            TotalUsers = await _db.Users.CountAsync(),
+            ApprovedUsers = await _db.Users.CountAsync(u => u.ApprovalStatus == "approved"),
+            PendingUsers = await _db.Users.CountAsync(u => u.ApprovalStatus == "pending")
         };
     }
 
