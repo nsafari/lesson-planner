@@ -486,7 +486,7 @@ export class DashboardComponent implements OnInit {
   }
 
   playAudio(audioUrl: string): void {
-    const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:3000${audioUrl}`;
+    const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:5253${audioUrl}`;
     const audio = new Audio(fullUrl);
     audio.play().catch(error => {
       console.error('Error playing audio:', error);

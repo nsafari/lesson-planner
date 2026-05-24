@@ -8,7 +8,7 @@ import { Student } from '../models/user.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly API_BASE = 'http://localhost:3000';
+  private readonly API_BASE = 'http://localhost:5253';
 
   constructor(private http: HttpClient) {}
 
