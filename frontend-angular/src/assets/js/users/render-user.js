@@ -372,7 +372,7 @@ function displaySubmissions(submissions) {
 // پخش صوت ارسال
 window.playSubmissionAudio = function (audioUrl, submissionIndex) {
     try {
-        const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:3000${audioUrl}`;
+        const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:5253${audioUrl}`;
         const audio = new Audio(fullUrl);
         
         audio.play().then(() => {

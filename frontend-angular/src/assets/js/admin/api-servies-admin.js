@@ -5,7 +5,7 @@ const { showAlert, refreshTable, updateStatistics, currentEditId } = table_users
 
 
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:3000', // هم‌راستا با بک‌اند فعلی
+    BASE_URL: 'http://localhost:5253', // هم‌راستا با بک‌اند جدید ASP.NET Core
     ENDPOINTS: {
         STUDENTS: '/students',
         STUDENT: '/students/:id',

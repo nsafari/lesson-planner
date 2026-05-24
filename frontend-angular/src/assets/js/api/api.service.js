@@ -1,6 +1,6 @@
 import { base64ToObject } from "../utilites/byte64.js";
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'http://localhost:5253';
 
 // Get auth token from localStorage
 function getAuthToken() {
