@@ -44,7 +44,8 @@ public class AuthController : ControllerBase
                     user.Student.FirstName,
                     user.Student.LastName,
                     user.Student.Email,
-                    user.Student.StudentId
+                    user.Student.StudentId,
+                    user.Student.PhoneNumber
                 )
             ));
         }
@@ -69,30 +70,22 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromForm] SignupRequest request, IFormFile? userImage)
+    public async Task<IActionResult> SignUp([FromBody] SignupRequest request)
     {
         if (request.Password != request.RetryPassword)
             return BadRequest(new { message = "پسوردها یکسان نیستند" });
 
-        string? imageUrl = null;
-        if (userImage != null)
-        {
-            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "public", "uploads");
-            Directory.CreateDirectory(uploadsDir);
-
-            var ext = Path.GetExtension(userImage.FileName);
-            var fileName = $"{Guid.NewGuid():N}{ext}";
-            var filePath = Path.Combine(uploadsDir, fileName);
-
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await userImage.CopyToAsync(stream);
-
-            imageUrl = $"/uploads/{fileName}";
-        }
-
         try
         {
-            await _userService.CreatePendingUserAsync(request.Username, request.Password, imageUrl);
+            await _userService.CreatePendingUserAsync(
+                request.Username,
+                request.Password,
+                request.ImageUrl,
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.PhoneNumber
+            );
             return Ok(new SignupResponse(
                 "ثبت نام با موفقیت انجام شد. در انتظار تایید مدیر سیستم هستید.",
                 "pending"
