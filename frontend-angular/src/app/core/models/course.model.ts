@@ -3,7 +3,7 @@ export interface Course {
   title: string;
   description: string;
   instructor: string;
-  code: string;
+  courseCode: string;
   status: 'active' | 'inactive' | 'completed';
   createdAt: Date;
   updatedAt: Date;
