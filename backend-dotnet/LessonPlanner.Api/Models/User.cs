@@ -16,6 +16,18 @@ public class User
     [Column(TypeName = "varchar(255)")]
     public string? PasswordHash { get; set; }
 
+    [Column(TypeName = "varchar(100)")]
+    public string? FirstName { get; set; }
+
+    [Column(TypeName = "varchar(100)")]
+    public string? LastName { get; set; }
+
+    [Column(TypeName = "varchar(100)")]
+    public string? Email { get; set; }
+
+    [Column(TypeName = "varchar(20)")]
+    public string? PhoneNumber { get; set; }
+
     [Column(TypeName = "varchar(255)")]
     public string? ImageUrl { get; set; }
 
